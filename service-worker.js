@@ -1,10 +1,3 @@
-self.addEventListener("install", e => {
-    e.waitUntil(
-      caches.open("laundry-cache").then(cache => {
-        return cache.addAll([
-          "/",
-          "/index.html"
-        ]);
-      })
-    );
-  });
+self.addEventListener('install',e=>{
+ e.waitUntil(caches.open('v1').then(c=>c.addAll(['/','/index.html'])));
+});
