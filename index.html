@@ -25,22 +25,34 @@
 <div id="hasil"></div>
 
 <script>
-async function login(){
- const r = await gas('login',{
-   email: email.value,
-   password: password.value
- });
- console.log("LOGIN RESPONSE:", r); // 🔥 lihat di console
+const URL = "ISI_URL_WEB_APP_KAMU";
 
- alert(JSON.stringify(r));
-}
-async function gas(func,data={}){
- const r = await fetch(URL,{method:'POST',body:JSON.stringify({func,...data})});
- return await r.json();
+// 🔌 koneksi ke GAS
+async function gas(func, data = {}) {
+  const r = await fetch(URL, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ func, ...data })
+  });
+  return await r.json();
 }
 
-async function login(){
- const r = await gas('login',{email:email.value,password:password.value});
- alert(JSON.stringify(r));
+// 🔐 LOGIN
+async function login() {
+  const r = await gas('login', {
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value
+  });
+
+  console.log("LOGIN RESPONSE:", r);
+
+  if (r.success) {
+    alert("Login berhasil");
+  } else {
+    alert("Login gagal");
+  }
 }
+</script>
 </html>
