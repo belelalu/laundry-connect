@@ -2,52 +2,28 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Laundry System v2</title>
+<title>TEST LOGIN</title>
 </head>
 
 <body>
 
 <div id="login">
   <h3>Login</h3>
-  <input id="email" placeholder="email"><br>
-  <input id="password" type="password"><br>
+  <input id="email" placeholder="email"><br><br>
+  <input id="password" type="password" placeholder="password"><br><br>
   <button onclick="login()">Login</button>
 </div>
 
 <div id="app" style="display:none">
-
-  <h3>Dashboard Laundry</h3>
+  <h2>Dashboard</h2>
   <button onclick="logout()">Logout</button>
-
-  <hr>
-
-  <input id="nama" placeholder="nama"><br>
-  <input id="hp" placeholder="no wa"><br>
-  <input id="berat" placeholder="berat"><br>
-  <input id="harga" placeholder="harga"><br>
-
-  <button onclick="add()">Simpan</button>
-
-  <div id="out"></div>
-
-  <hr>
-
-  <h4>Dashboard</h4>
-  <div id="dash"></div>
-
 </div>
 
 <script>
 
-const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
+const URL = "PASTE_URL_GAS_KAMU_DISINI";
 
-function show(){
-  document.getElementById("login").style.display = "none";
-  document.getElementById("app").style.display = "block";
-
-  load(); // load dashboard
-}
-  
+// 🔌 GAS
 async function gas(f,d={}){
   const r = await fetch(URL,{
     method:"POST",
@@ -60,7 +36,10 @@ async function gas(f,d={}){
   return JSON.parse(text);
 }
 
+// 🔐 LOGIN
 async function login(){
+
+  alert("LOGIN DIKLIK"); // 🔥 TEST
 
   const r = await gas("login",{
     email: document.getElementById("email").value,
@@ -70,60 +49,24 @@ async function login(){
   console.log("LOGIN RESULT:", r);
 
   if(r.success){
-    console.log("LOGIN SUCCESS → CALL SHOW()");
-    show(); // 🔥 ini harus jalan
-  } else {
-    alert("Login gagal");
+    alert("LOGIN SUKSES"); // 🔥 TEST
+    show();
+  }else{
+    alert("LOGIN GAGAL");
   }
 }
 
+// 🔄 SHOW DASHBOARD
 function show(){
-  login.style.display="none";
-  app.style.display="block";
-  load();
+  alert("SHOW DIPANGGIL"); // 🔥 TEST
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
 }
 
-async function add(){
-  const r = await gas("addTransaction",{
-    nama:nama.value,
-    hp:hp.value,
-    berat:berat.value,
-    harga:harga.value
-  });
-
-  out.innerHTML = "Kode: "+r.kode;
-  load();
-}
-
-async function load(){
-  const r = await gas("getDashboard");
-
-  let h = `
-    <p>Income: ${r.data.summary.income}</p>
-    <p>Count: ${r.data.summary.count}</p>
-    <h5>Latest</h5>
-  `;
-
-  r.data.latest.forEach(t=>{
-    const wa = "https://wa.me/"+t.nama;
-    h += `
-      <div>
-        ${t.kode} - ${t.nama} - ${t.status}
-        <a href="${wa}" target="_blank">WA</a>
-      </div>
-    `;
-  });
-
-  dash.innerHTML = h;
-}
-
+// 🔓 LOGOUT
 function logout(){
-  localStorage.clear();
   location.reload();
-}
-
-window.onload=()=>{
-  if(localStorage.getItem("u")) show();
 }
 
 </script>
