@@ -41,6 +41,13 @@
 
 const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 
+function show(){
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  load(); // load dashboard
+}
+  
 async function gas(f,d={}){
   const r = await fetch(URL,{
     method:"POST",
