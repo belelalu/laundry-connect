@@ -54,6 +54,7 @@ async function gas(f,d={}){
 }
 
 async function login(){
+
   const r = await gas("login",{
     email: document.getElementById("email").value,
     password: document.getElementById("password").value
@@ -63,7 +64,7 @@ async function login(){
 
   if(r.success){
     localStorage.setItem("u", JSON.stringify(r.data));
-    show(); // 🔥 ini akan pindah ke dashboard
+    show(); // 🔥 INI YANG MEMINDAHKAN HALAMAN
   } else {
     alert("Login gagal");
   }
