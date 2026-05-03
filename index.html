@@ -44,9 +44,13 @@ const URL = "YOUR_GAS_URL";
 async function gas(f,d={}){
   const r = await fetch(URL,{
     method:"POST",
-    body:JSON.stringify({func:f,...d})
+    body: JSON.stringify({func:f,...d})
   });
-  return await r.json();
+
+  const text = await r.text();
+  console.log("RAW:", text);
+
+  return JSON.parse(text);
 }
 
 async function login(){
