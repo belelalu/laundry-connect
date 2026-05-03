@@ -50,10 +50,19 @@ async function gas(f,d={}){
 }
 
 async function login(){
-  const r = await gas("login",{email:email.value,password:password.value});
+
+  const r = await gas("login",{
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value
+  });
+
+  console.log("LOGIN RESULT:", r);
+
   if(r.success){
     localStorage.setItem("u",JSON.stringify(r.data));
     show();
+  }else{
+    alert("Login gagal: " + (r.message || ""));
   }
 }
 
