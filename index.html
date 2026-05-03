@@ -2,71 +2,108 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TEST LOGIN</title>
+<title>Laundry System v2</title>
 </head>
 
 <body>
 
 <div id="login">
   <h3>Login</h3>
-  <input id="email" placeholder="email"><br><br>
-  <input id="password" type="password" placeholder="password"><br><br>
-  <button onclick="doLogin()">Login</button>
+  <input id="email" placeholder="email"><br>
+  <input id="password" type="password"><br>
+  <button onclick="dologin()">Login</button>
 </div>
 
 <div id="app" style="display:none">
-  <h2>Dashboard</h2>
+
+  <h3>Dashboard Laundry</h3>
   <button onclick="logout()">Logout</button>
+
+  <hr>
+
+  <input id="nama" placeholder="nama"><br>
+  <input id="hp" placeholder="no wa"><br>
+  <input id="berat" placeholder="berat"><br>
+  <input id="harga" placeholder="harga"><br>
+
+  <button onclick="add()">Simpan</button>
+
+  <div id="out"></div>
+
+  <hr>
+
+  <h4>Dashboard</h4>
+  <div id="dash"></div>
+
 </div>
 
 <script>
 
-const URL = "PASTE_URL_GAS_KAMU_DISINI";
+const URL = "YOUR_GAS_URL";
 
-// 🔌 GAS
 async function gas(f,d={}){
   const r = await fetch(URL,{
     method:"POST",
-    body: JSON.stringify({func:f,...d})
+    body:JSON.stringify({func:f,...d})
   });
-
-  const text = await r.text();
-  console.log("RAW:", text);
-
-  return JSON.parse(text);
+  return await r.json();
 }
 
-// 🔐 LOGIN
 async function login(){
-
-  alert("LOGIN DIKLIK"); // 🔥 TEST
-
-  const r = await gas("login",{
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value
-  });
-
-  console.log("LOGIN RESULT:", r);
-
+  const r = await gas("login",{email:email.value,password:password.value});
   if(r.success){
-    alert("LOGIN SUKSES"); // 🔥 TEST
+    localStorage.setItem("u",JSON.stringify(r.data));
     show();
-  }else{
-    alert("LOGIN GAGAL");
   }
 }
 
-// 🔄 SHOW DASHBOARD
 function show(){
-  alert("SHOW DIPANGGIL"); // 🔥 TEST
-
-  document.getElementById("login").style.display = "none";
-  document.getElementById("app").style.display = "block";
+  login.style.display="none";
+  app.style.display="block";
+  load();
 }
 
-// 🔓 LOGOUT
+async function add(){
+  const r = await gas("addTransaction",{
+    nama:nama.value,
+    hp:hp.value,
+    berat:berat.value,
+    harga:harga.value
+  });
+
+  out.innerHTML = "Kode: "+r.kode;
+  load();
+}
+
+async function load(){
+  const r = await gas("getDashboard");
+
+  let h = `
+    <p>Income: ${r.data.summary.income}</p>
+    <p>Count: ${r.data.summary.count}</p>
+    <h5>Latest</h5>
+  `;
+
+  r.data.latest.forEach(t=>{
+    const wa = "https://wa.me/"+t.nama;
+    h += `
+      <div>
+        ${t.kode} - ${t.nama} - ${t.status}
+        <a href="${wa}" target="_blank">WA</a>
+      </div>
+    `;
+  });
+
+  dash.innerHTML = h;
+}
+
 function logout(){
+  localStorage.clear();
   location.reload();
+}
+
+window.onload=()=>{
+  if(localStorage.getItem("u")) show();
 }
 
 </script>
