@@ -31,12 +31,13 @@ const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50
 async function gas(func, data = {}) {
   const r = await fetch(URL, {
     method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
     body: JSON.stringify({ func, ...data })
   });
-  return await r.json();
+
+  const text = await r.text();
+  console.log("RAW RESPONSE:", text);
+
+  return JSON.parse(text);
 }
 
 // 🔐 LOGIN
