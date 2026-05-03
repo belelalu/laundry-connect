@@ -1,92 +1,43 @@
+// =========================
+// FILE: index.html (Frontend)
+// =========================
+
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Laundry App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="manifest" href="manifest.json">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<title>Laundry App</title>
 </head>
-
-<body style="font-family:sans-serif; padding:20px">
+<body>
 
 <h2>Login</h2>
-
-<input id="email" placeholder="Email"><br><br>
-<input id="password" type="password" placeholder="Password"><br><br>
+<input id="email" placeholder="email"><br>
+<input id="password" type="password" placeholder="password"><br>
 <button onclick="login()">Login</button>
 
 <hr>
 
-<h2>Dashboard</h2>
-<div id="dash"></div>
-
-<canvas id="chart"></canvas>
+<h2>Tambah Transaksi</h2>
+<input id="nama" placeholder="nama"><br>
+<input id="hp" placeholder="628xxxx"><br>
+<input id="berat" placeholder="berat"><br>
+<input id="harga" placeholder="harga"><br>
+<button onclick="tambah()">Simpan</button>
 
 <hr>
-
-<h2>Tambah Laundry</h2>
-<input id="nama" placeholder="Nama"><br>
-<input id="hp" placeholder="HP"><br>
-<input id="berat" type="number" placeholder="Berat"><br>
-<input id="harga" type="number" placeholder="Harga/kg"><br>
-
-<button onclick="add()">Simpan</button>
+<div id="hasil"></div>
 
 <script>
-const URL = "https://script.google.com/u/0/home/projects/1js2hkthZZIjmFEiThnnSXO7F8DXEOYHEMAuiqJLAuwFq-ljGhoIKYP4g/edit";
+const URL = "ISI_URL_WEB_APP";
 
-async function gas(func,data={}) {
-  const r = await fetch(URL,{
-    method:"POST",
-    body:JSON.stringify({func,...data})
-  });
-  return await r.json();
+async function gas(func,data={}){
+ const r = await fetch(URL,{method:'POST',body:JSON.stringify({func,...data})});
+ return await r.json();
 }
 
-async function login() {
-  const res = await gas("login",{
-    email:email.value,
-    password:password.value
-  });
-
-  if(res.success){
-    alert("Login OK");
-    loadDash();
-  } else alert("Gagal");
+async function login(){
+ const r = await gas('login',{email:email.value,password:password.value});
+ alert(JSON.stringify(r));
 }
-
-async function loadDash(){
-  const res = await gas("getDashboard");
-
-  dash.innerHTML = `
-  Pendapatan: ${res.data.summary.today_income}<br>
-  Laundry: ${res.data.summary.today_count}
-  `;
-
-  const labels = res.data.latest.map(x=>x.kode_tracking);
-  const values = res.data.latest.map(x=>x.total);
-
-  new Chart(chart,{
-    type:"bar",
-    data:{ labels, datasets:[{data:values}] }
-  });
-}
-
-async function add(){
-  const res = await gas("addTransaction",{
-    customer_id:Date.now(),
-    nama_pelanggan:nama.value,
-    hp:hp.value,
-    layanan:"Cuci",
-    berat:Number(berat.value),
-    harga_perkg:Number(harga.value),
-    estimasi:new Date()
-  });
-
-  alert("Kode: "+res.kode_tracking);
-}
-</script>
-
-</body>
 </html>
