@@ -5,32 +5,52 @@
 <link rel="manifest" href="manifest.json">
 <title>Laundry App</title>
 </head>
-<body>
 
-<h2>Login</h2>
-<input id="email" placeholder="email"><br>
-<input id="password" type="password" placeholder="password"><br>
-<button onclick="login()">Login</button>
+<body style="font-family: Arial, sans-serif;">
 
-<hr>
+<!-- ================= LOGIN ================= -->
+<div id="loginView">
+  <h2>Login Laundry</h2>
 
-<h2>Tambah Transaksi</h2>
-<input id="nama" placeholder="nama"><br>
-<input id="hp" placeholder="628xxxx"><br>
-<input id="berat" placeholder="berat"><br>
-<input id="harga" placeholder="harga"><br>
-<button onclick="tambah()">Simpan</button>
+  <input id="email" placeholder="email"><br><br>
+  <input id="password" type="password" placeholder="password"><br><br>
 
-<hr>
-<div id="hasil"></div>
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dashboard" style="display:none">
+
+  <h2>Dashboard Laundry</h2>
+
+  <button onclick="logout()">Logout</button>
+
+  <hr>
+
+  <!-- TRANSAKSI -->
+  <h3>Tambah Transaksi</h3>
+
+  <input id="nama" placeholder="nama"><br><br>
+  <input id="hp" placeholder="628xxxx"><br><br>
+  <input id="berat" placeholder="berat (kg)"><br><br>
+  <input id="harga" placeholder="harga/kg"><br><br>
+
+  <button onclick="tambah()">Simpan</button>
+
+  <hr>
+
+  <div id="hasil"></div>
+
+</div>
 
 <script>
+
 const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 
-// 🔌 koneksi ke GAS
+// ================= GAS CONNECT =================
 async function gas(func, data = {}) {
   const r = await fetch(URL, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({ func, ...data })
   });
 
@@ -40,9 +60,10 @@ async function gas(func, data = {}) {
   return JSON.parse(text);
 }
 
-// 🔐 LOGIN
+// ================= LOGIN =================
 async function login() {
-  const r = await gas('login', {
+
+  const r = await gas("login", {
     email: document.getElementById("email").value,
     password: document.getElementById("password").value
   });
@@ -51,16 +72,9 @@ async function login() {
 
   if (r.success) {
 
-    // 🔥 SIMPAN SESSION
     localStorage.setItem("user", JSON.stringify(r.data));
 
-    // 🔥 PINDAH HALAMAN
-    document.getElementById("dashboard").style.display = "block";
-    document.getElementById("hasil").innerHTML = "";
-    document.querySelector("h2").style.display = "none";
-    document.querySelectorAll("input, button")[0].style.display = "none";
-    document.querySelectorAll("input, button")[1].style.display = "none";
-    document.querySelectorAll("input, button")[2].style.display = "none";
+    showDashboard();
 
     alert("Login berhasil");
 
@@ -68,16 +82,45 @@ async function login() {
     alert("Login gagal");
   }
 }
+
+// ================= TAMBAH TRANSAKSI =================
+async function tambah() {
+
+  const r = await gas("addTransaction", {
+    nama_pelanggan: document.getElementById("nama").value,
+    hp: document.getElementById("hp").value,
+    layanan: "Cuci Kering",
+    berat: Number(document.getElementById("berat").value),
+    harga_perkg: Number(document.getElementById("harga").value),
+    estimasi: new Date()
+  });
+
+  document.getElementById("hasil").innerHTML =
+    "Kode Tracking: <b>" + r.kode_tracking + "</b>";
+}
+
+// ================= DASHBOARD VIEW =================
+function showDashboard() {
+  document.getElementById("loginView").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+}
+
+// ================= LOGOUT =================
+function logout() {
+  localStorage.removeItem("user");
+  location.reload();
+}
+
+// ================= AUTO LOGIN =================
+window.onload = function () {
+  const user = localStorage.getItem("user");
+
+  if (user) {
+    showDashboard();
+  }
+};
+
 </script>
 
-
-  <div id="dashboard" style="display:none">
-  <h2>Dashboard Laundry</h2>
-
-  <button onclick="logout()">Logout</button>
-
-  <hr>
-
-  <div id="info"></div>
-</div>
+</body>
 </html>
