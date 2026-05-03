@@ -6,7 +6,7 @@
 <title>Laundry App</title>
 </head>
 
-<body style="font-family: Arial, sans-serif;">
+<body style="font-family: Arial;">
 
 <!-- ================= LOGIN ================= -->
 <div id="loginView">
@@ -18,6 +18,8 @@
   <button onclick="login()">Login</button>
 </div>
 
+<hr>
+
 <!-- ================= DASHBOARD ================= -->
 <div id="dashboard" style="display:none">
 
@@ -27,19 +29,28 @@
 
   <hr>
 
-  <!-- TRANSAKSI -->
   <h3>Tambah Transaksi</h3>
 
   <input id="nama" placeholder="nama"><br><br>
-  <input id="hp" placeholder="628xxxx"><br><br>
-  <input id="berat" placeholder="berat (kg)"><br><br>
+  <input id="hp" placeholder="no wa"><br><br>
+  <input id="berat" placeholder="berat"><br><br>
   <input id="harga" placeholder="harga/kg"><br><br>
 
   <button onclick="tambah()">Simpan</button>
 
+  <div id="hasil"></div>
+
   <hr>
 
-  <div id="hasil"></div>
+  <!-- DASHBOARD REAL -->
+  <h3>📊 Dashboard Real</h3>
+
+  <div id="summary"></div>
+
+  <hr>
+
+  <h4>🧾 Transaksi Terbaru</h4>
+  <div id="latest"></div>
 
 </div>
 
@@ -47,7 +58,7 @@
 
 const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 
-// ================= GAS CONNECT =================
+// ================= GAS =================
 async function gas(func, data = {}) {
   const r = await fetch(URL, {
     method: "POST",
@@ -55,60 +66,74 @@ async function gas(func, data = {}) {
   });
 
   const text = await r.text();
-  console.log("RAW RESPONSE:", text);
-
   return JSON.parse(text);
 }
 
 // ================= LOGIN =================
 async function login() {
-
   const r = await gas("login", {
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value
+    email: email.value,
+    password: password.value
   });
 
-  console.log("LOGIN RESPONSE:", r);
-
   if (r.success) {
-
     localStorage.setItem("user", JSON.stringify(r.data));
-
     showDashboard();
-
-    alert("Login berhasil");
-
   } else {
     alert("Login gagal");
   }
 }
 
-// ================= TAMBAH TRANSAKSI =================
-async function tambah() {
-  const r = await gas("addTransaction", {
-    nama_pelanggan: document.getElementById("nama").value,
-    hp: document.getElementById("hp").value,
-    layanan: "Cuci Kering",
-    berat: Number(document.getElementById("berat").value),
-    harga_perkg: Number(document.getElementById("harga").value),
-    estimasi: new Date()
-  });
-
-  console.log("TRANSAKSI RESPONSE:", r);
-
-  if (r.success) {
-    document.getElementById("hasil").innerHTML =
-      "✅ Berhasil! Kode: <b>" + r.kode_tracking + "</b>";
-  } else {
-    document.getElementById("hasil").innerHTML =
-      "❌ Gagal simpan transaksi";
-  }
-}
-
-// ================= DASHBOARD VIEW =================
+// ================= SHOW DASHBOARD =================
 function showDashboard() {
   document.getElementById("loginView").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
+
+  loadDashboard();
+}
+
+// ================= ADD TRANSACTION =================
+async function tambah() {
+  const r = await gas("addTransaction", {
+    nama_pelanggan: nama.value,
+    hp: hp.value,
+    layanan: "Cuci Kering",
+    berat: Number(berat.value),
+    harga_perkg: Number(harga.value),
+    estimasi: new Date()
+  });
+
+  document.getElementById("hasil").innerHTML =
+    "Kode: <b>" + r.kode_tracking + "</b>";
+
+  loadDashboard();
+}
+
+// ================= DASHBOARD REAL =================
+async function loadDashboard() {
+  const r = await gas("getDashboard");
+
+  // SUMMARY
+  document.getElementById("summary").innerHTML = `
+    <p>💰 Pendapatan Hari Ini: <b>Rp ${r.data.summary.today_income}</b></p>
+    <p>📦 Transaksi Hari Ini: <b>${r.data.summary.today_count}</b></p>
+  `;
+
+  // LIST
+  let html = "<ul>";
+
+  r.data.latest.forEach(t => {
+    html += `
+      <li>
+        <b>${t.kode_tracking}</b> - ${t.nama_pelanggan} - 
+        Rp ${t.total} - ${t.status}
+      </li>
+    `;
+  });
+
+  html += "</ul>";
+
+  document.getElementById("latest").innerHTML = html;
 }
 
 // ================= LOGOUT =================
@@ -120,10 +145,7 @@ function logout() {
 // ================= AUTO LOGIN =================
 window.onload = function () {
   const user = localStorage.getItem("user");
-
-  if (user) {
-    showDashboard();
-  }
+  if (user) showDashboard();
 };
 
 </script>
