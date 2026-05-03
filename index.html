@@ -70,8 +70,8 @@ async function login(){
   console.log("LOGIN RESULT:", r);
 
   if(r.success){
-    localStorage.setItem("u", JSON.stringify(r.data));
-    show(); // 🔥 INI YANG MEMINDAHKAN HALAMAN
+    console.log("LOGIN SUCCESS → CALL SHOW()");
+    show(); // 🔥 ini harus jalan
   } else {
     alert("Login gagal");
   }
