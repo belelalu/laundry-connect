@@ -3,32 +3,7 @@
 <body>
 
 <h2>Tracking Laundry</h2>
-
-<div id="hasil"></div>
-
-<script>
-const URL = "ISI_URL_WEB_APP";
-
-const kode = new URL(location).searchParams.get("kode");
-
-fetch(URL,{
-  method:"POST",
-  body:JSON.stringify({func:"trackLaundry",kode})
-})
-.then(r=>r.json())
-.then(res=>{
-  if(!res.data){
-    hasil.innerHTML="Tidak ditemukan";
-    return;
-  }
-
-  hasil.innerHTML = `
-  Nama: ${res.data.nama_pelanggan}<br>
-  Status: ${res.data.status}<br>
-  Total: ${res.data.total}
-  `;
-});
-</script>
+<p>Halaman tracking siap</p>
 
 </body>
 </html>
