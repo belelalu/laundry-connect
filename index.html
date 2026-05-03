@@ -50,10 +50,34 @@ async function login() {
   console.log("LOGIN RESPONSE:", r);
 
   if (r.success) {
+
+    // 🔥 SIMPAN SESSION
+    localStorage.setItem("user", JSON.stringify(r.data));
+
+    // 🔥 PINDAH HALAMAN
+    document.getElementById("dashboard").style.display = "block";
+    document.getElementById("hasil").innerHTML = "";
+    document.querySelector("h2").style.display = "none";
+    document.querySelectorAll("input, button")[0].style.display = "none";
+    document.querySelectorAll("input, button")[1].style.display = "none";
+    document.querySelectorAll("input, button")[2].style.display = "none";
+
     alert("Login berhasil");
+
   } else {
     alert("Login gagal");
   }
 }
 </script>
+
+
+  <div id="dashboard" style="display:none">
+  <h2>Dashboard Laundry</h2>
+
+  <button onclick="logout()">Logout</button>
+
+  <hr>
+
+  <div id="info"></div>
+</div>
 </html>
