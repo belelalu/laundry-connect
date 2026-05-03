@@ -7,14 +7,16 @@
 
 <body>
 
-<div id="login">
+<!-- LOGIN -->
+<div id="loginView">
   <h3>Login</h3>
   <input id="email" placeholder="email"><br>
   <input id="password" type="password"><br>
-  <button onclick="login()">Login</button>
+  <button onclick="doLogin()">Login</button>
 </div>
 
-<div id="app" style="display:none">
+<!-- APP -->
+<div id="appView" style="display:none">
 
   <h3>Dashboard Laundry</h3>
   <button onclick="logout()">Logout</button>
@@ -41,49 +43,57 @@
 
 const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 
+// GAS CALL (AMAN)
 async function gas(f,d={}){
   const r = await fetch(URL,{
     method:"POST",
     body:JSON.stringify({func:f,...d})
   });
-  return await r.json();
+
+  const text = await r.text();
+  console.log("RAW:", text);
+
+  return JSON.parse(text);
 }
 
-async function login(){
-
+// LOGIN
+async function doLogin(){
   const r = await gas("login",{
     email: document.getElementById("email").value,
     password: document.getElementById("password").value
   });
 
-  console.log("LOGIN RESULT:", r);
+  console.log(r);
 
   if(r.success){
     localStorage.setItem("u",JSON.stringify(r.data));
-    show();
+    showApp();
   }else{
-    alert("Login gagal: " + (r.message || ""));
+    alert("Login gagal: " + r.message);
   }
 }
 
-function show(){
-  login.style.display="none";
-  app.style.display="block";
+// SHOW APP
+function showApp(){
+  document.getElementById("loginView").style.display="none";
+  document.getElementById("appView").style.display="block";
   load();
 }
 
+// ADD TRANSAKSI
 async function add(){
   const r = await gas("addTransaction",{
-    nama:nama.value,
-    hp:hp.value,
-    berat:berat.value,
-    harga:harga.value
+    nama: document.getElementById("nama").value,
+    hp: document.getElementById("hp").value,
+    berat: document.getElementById("berat").value,
+    harga: document.getElementById("harga").value
   });
 
-  out.innerHTML = "Kode: "+r.kode;
+  document.getElementById("out").innerHTML = "Kode: "+r.kode;
   load();
 }
 
+// LOAD DASHBOARD
 async function load(){
   const r = await gas("getDashboard");
 
@@ -94,25 +104,27 @@ async function load(){
   `;
 
   r.data.latest.forEach(t=>{
-    const wa = "https://wa.me/"+t.nama;
     h += `
       <div>
         ${t.kode} - ${t.nama} - ${t.status}
-        <a href="${wa}" target="_blank">WA</a>
       </div>
     `;
   });
 
-  dash.innerHTML = h;
+  document.getElementById("dash").innerHTML = h;
 }
 
+// LOGOUT
 function logout(){
   localStorage.clear();
   location.reload();
 }
 
-window.onload=()=>{
-  if(localStorage.getItem("u")) show();
+// AUTO LOGIN
+window.onload = ()=>{
+  if(localStorage.getItem("u")){
+    showApp();
+  }
 }
 
 </script>
