@@ -85,7 +85,6 @@ async function login() {
 
 // ================= TAMBAH TRANSAKSI =================
 async function tambah() {
-
   const r = await gas("addTransaction", {
     nama_pelanggan: document.getElementById("nama").value,
     hp: document.getElementById("hp").value,
@@ -95,8 +94,15 @@ async function tambah() {
     estimasi: new Date()
   });
 
-  document.getElementById("hasil").innerHTML =
-    "Kode Tracking: <b>" + r.kode_tracking + "</b>";
+  console.log("TRANSAKSI RESPONSE:", r);
+
+  if (r.success) {
+    document.getElementById("hasil").innerHTML =
+      "✅ Berhasil! Kode: <b>" + r.kode_tracking + "</b>";
+  } else {
+    document.getElementById("hasil").innerHTML =
+      "❌ Gagal simpan transaksi";
+  }
 }
 
 // ================= DASHBOARD VIEW =================
