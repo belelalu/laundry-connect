@@ -2,151 +2,109 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json">
-<title>Laundry App</title>
+<title>Laundry System v2</title>
 </head>
 
-<body style="font-family: Arial;">
+<body>
 
-<!-- ================= LOGIN ================= -->
-<div id="loginView">
-  <h2>Login Laundry</h2>
-
-  <input id="email" placeholder="email"><br><br>
-  <input id="password" type="password" placeholder="password"><br><br>
-
+<div id="login">
+  <h3>Login</h3>
+  <input id="email" placeholder="email"><br>
+  <input id="password" type="password"><br>
   <button onclick="login()">Login</button>
 </div>
 
-<hr>
+<div id="app" style="display:none">
 
-<!-- ================= DASHBOARD ================= -->
-<div id="dashboard" style="display:none">
-
-  <h2>Dashboard Laundry</h2>
-
+  <h3>Dashboard Laundry</h3>
   <button onclick="logout()">Logout</button>
 
   <hr>
 
-  <h3>Tambah Transaksi</h3>
+  <input id="nama" placeholder="nama"><br>
+  <input id="hp" placeholder="no wa"><br>
+  <input id="berat" placeholder="berat"><br>
+  <input id="harga" placeholder="harga"><br>
 
-  <input id="nama" placeholder="nama"><br><br>
-  <input id="hp" placeholder="no wa"><br><br>
-  <input id="berat" placeholder="berat"><br><br>
-  <input id="harga" placeholder="harga/kg"><br><br>
+  <button onclick="add()">Simpan</button>
 
-  <button onclick="tambah()">Simpan</button>
-
-  <div id="hasil"></div>
+  <div id="out"></div>
 
   <hr>
 
-  <!-- DASHBOARD REAL -->
-  <h3>📊 Dashboard Real</h3>
-
-  <div id="summary"></div>
-
-  <hr>
-
-  <h4>🧾 Transaksi Terbaru</h4>
-  <div id="latest"></div>
+  <h4>Dashboard</h4>
+  <div id="dash"></div>
 
 </div>
 
 <script>
 
-const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
+const URL = "YOUR_GAS_URL";
 
-// ================= GAS =================
-async function gas(func, data = {}) {
-  const r = await fetch(URL, {
-    method: "POST",
-    body: JSON.stringify({ func, ...data })
+async function gas(f,d={}){
+  const r = await fetch(URL,{
+    method:"POST",
+    body:JSON.stringify({func:f,...d})
   });
-
-  const text = await r.text();
-  return JSON.parse(text);
+  return await r.json();
 }
 
-// ================= LOGIN =================
-async function login() {
-  const r = await gas("login", {
-    email: email.value,
-    password: password.value
-  });
-
-  if (r.success) {
-    localStorage.setItem("user", JSON.stringify(r.data));
-    showDashboard();
-  } else {
-    alert("Login gagal");
+async function login(){
+  const r = await gas("login",{email:email.value,password:password.value});
+  if(r.success){
+    localStorage.setItem("u",JSON.stringify(r.data));
+    show();
   }
 }
 
-// ================= SHOW DASHBOARD =================
-function showDashboard() {
-  document.getElementById("loginView").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
-
-  loadDashboard();
+function show(){
+  login.style.display="none";
+  app.style.display="block";
+  load();
 }
 
-// ================= ADD TRANSACTION =================
-async function tambah() {
-  const r = await gas("addTransaction", {
-    nama_pelanggan: nama.value,
-    hp: hp.value,
-    layanan: "Cuci Kering",
-    berat: Number(berat.value),
-    harga_perkg: Number(harga.value),
-    estimasi: new Date()
+async function add(){
+  const r = await gas("addTransaction",{
+    nama:nama.value,
+    hp:hp.value,
+    berat:berat.value,
+    harga:harga.value
   });
 
-  document.getElementById("hasil").innerHTML =
-    "Kode: <b>" + r.kode_tracking + "</b>";
-
-  loadDashboard();
+  out.innerHTML = "Kode: "+r.kode;
+  load();
 }
 
-// ================= DASHBOARD REAL =================
-async function loadDashboard() {
+async function load(){
   const r = await gas("getDashboard");
 
-  // SUMMARY
-  document.getElementById("summary").innerHTML = `
-    <p>💰 Pendapatan Hari Ini: <b>Rp ${r.data.summary.today_income}</b></p>
-    <p>📦 Transaksi Hari Ini: <b>${r.data.summary.today_count}</b></p>
+  let h = `
+    <p>Income: ${r.data.summary.income}</p>
+    <p>Count: ${r.data.summary.count}</p>
+    <h5>Latest</h5>
   `;
 
-  // LIST
-  let html = "<ul>";
-
-  r.data.latest.forEach(t => {
-    html += `
-      <li>
-        <b>${t.kode_tracking}</b> - ${t.nama_pelanggan} - 
-        Rp ${t.total} - ${t.status}
-      </li>
+  r.data.latest.forEach(t=>{
+    const wa = "https://wa.me/"+t.nama;
+    h += `
+      <div>
+        ${t.kode} - ${t.nama} - ${t.status}
+        <a href="${wa}" target="_blank">WA</a>
+      </div>
     `;
   });
 
-  html += "</ul>";
-
-  document.getElementById("latest").innerHTML = html;
+  dash.innerHTML = h;
 }
 
-// ================= LOGOUT =================
-function logout() {
-  localStorage.removeItem("user");
+function logout(){
+  localStorage.clear();
   location.reload();
 }
 
-// ================= AUTO LOGIN =================
-window.onload = function () {
-  const user = localStorage.getItem("user");
-  if (user) showDashboard();
-};
+window.onload=()=>{
+  if(localStorage.getItem("u")) show();
+}
 
 </script>
 
