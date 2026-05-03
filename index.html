@@ -2,9 +2,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Laundry System</title>
+<title>Laundry FixTrack UI</title>
 
-<!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
@@ -13,75 +12,94 @@
 
 <!-- LOGIN -->
 <div id="loginView" class="flex items-center justify-center h-screen">
-
-  <div class="bg-white p-6 rounded-xl shadow w-80">
-    <h2 class="text-xl font-bold mb-4 text-center">Login Laundry</h2>
+  <div class="bg-white p-6 rounded-2xl shadow w-80">
+    <h2 class="text-xl font-bold mb-4 text-center">Laundry Login</h2>
 
     <input id="email" placeholder="Email"
-      class="w-full mb-3 p-2 border rounded">
+      class="w-full mb-3 p-3 border rounded-xl">
 
     <input id="password" type="password" placeholder="Password"
-      class="w-full mb-3 p-2 border rounded">
+      class="w-full mb-3 p-3 border rounded-xl">
 
     <button onclick="doLogin()"
-      class="w-full bg-blue-500 text-white p-2 rounded">
+      class="w-full bg-blue-600 text-white p-3 rounded-xl">
       Login
     </button>
   </div>
-
 </div>
 
 <!-- APP -->
-<div id="appView" class="hidden p-4 max-w-md mx-auto">
+<div id="appView" class="hidden">
 
-  <!-- HEADER -->
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-lg font-bold">Dashboard Laundry</h2>
-    <button onclick="logout()" class="text-red-500">Logout</button>
+  <!-- SIDEBAR -->
+  <div class="fixed left-0 top-0 h-full w-60 bg-white shadow p-4">
+    <h2 class="font-bold text-lg mb-6">Laundry App</h2>
+
+    <button onclick="showPage('dashboard')" class="block mb-3 w-full text-left">📊 Dashboard</button>
+    <button onclick="showPage('transaksi')" class="block mb-3 w-full text-left">🧾 Transaksi</button>
+    <button onclick="logout()" class="mt-10 text-red-500">Logout</button>
   </div>
 
-  <!-- SUMMARY -->
-  <div class="grid grid-cols-2 gap-3 mb-4">
-    <div class="bg-white p-3 rounded shadow text-center">
-      <p class="text-sm text-gray-500">Income</p>
-      <p id="income" class="font-bold text-lg">0</p>
+  <!-- CONTENT -->
+  <div class="ml-60 p-6">
+
+    <!-- DASHBOARD -->
+    <div id="pageDashboard">
+
+      <h2 class="text-xl font-bold mb-4">Dashboard</h2>
+
+      <!-- SUMMARY -->
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-2xl shadow">
+          <p class="text-gray-500 text-sm">Pendapatan Hari Ini</p>
+          <p id="income" class="text-xl font-bold">0</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl shadow">
+          <p class="text-gray-500 text-sm">Transaksi</p>
+          <p id="count" class="text-xl font-bold">0</p>
+        </div>
+      </div>
+
+      <!-- LIST -->
+      <div class="bg-white p-4 rounded-2xl shadow">
+        <h3 class="font-bold mb-3">Transaksi Terbaru</h3>
+        <div id="list"></div>
+      </div>
+
     </div>
-    <div class="bg-white p-3 rounded shadow text-center">
-      <p class="text-sm text-gray-500">Transaksi</p>
-      <p id="count" class="font-bold text-lg">0</p>
+
+    <!-- TRANSAKSI -->
+    <div id="pageTransaksi" class="hidden">
+
+      <h2 class="text-xl font-bold mb-4">Tambah Transaksi</h2>
+
+      <div class="bg-white p-4 rounded-2xl shadow max-w-md">
+
+        <input id="nama" placeholder="Nama"
+          class="w-full mb-3 p-3 border rounded-xl">
+
+        <input id="hp" placeholder="No WhatsApp"
+          class="w-full mb-3 p-3 border rounded-xl">
+
+        <input id="berat" placeholder="Berat"
+          class="w-full mb-3 p-3 border rounded-xl">
+
+        <input id="harga" placeholder="Harga/kg"
+          class="w-full mb-3 p-3 border rounded-xl">
+
+        <button onclick="add()"
+          class="w-full bg-green-600 text-white p-3 rounded-xl">
+          Simpan
+        </button>
+
+        <div id="out" class="mt-2 text-green-600 text-sm"></div>
+
+      </div>
+
     </div>
+
   </div>
-
-  <!-- FORM -->
-  <div class="bg-white p-4 rounded shadow mb-4">
-    <h3 class="font-bold mb-2">Tambah Transaksi</h3>
-
-    <input id="nama" placeholder="Nama"
-      class="w-full mb-2 p-2 border rounded">
-
-    <input id="hp" placeholder="No WA"
-      class="w-full mb-2 p-2 border rounded">
-
-    <input id="berat" placeholder="Berat (kg)"
-      class="w-full mb-2 p-2 border rounded">
-
-    <input id="harga" placeholder="Harga/kg"
-      class="w-full mb-2 p-2 border rounded">
-
-    <button onclick="add()"
-      class="w-full bg-green-500 text-white p-2 rounded">
-      Simpan
-    </button>
-
-    <div id="out" class="text-sm mt-2 text-green-600"></div>
-  </div>
-
-  <!-- LIST -->
-  <div class="bg-white p-4 rounded shadow">
-    <h3 class="font-bold mb-2">Transaksi Terbaru</h3>
-    <div id="list" class="space-y-2"></div>
-  </div>
-
 </div>
 
 <script>
@@ -99,8 +117,8 @@ async function gas(f,d={}){
 // LOGIN
 async function doLogin(){
   const r = await gas("login",{
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value
+    email: email.value,
+    password: password.value
   });
 
   if(r.success){
@@ -113,36 +131,45 @@ async function doLogin(){
 
 // SHOW APP
 function showApp(){
-  document.getElementById("loginView").classList.add("hidden");
-  document.getElementById("appView").classList.remove("hidden");
-  load();
+  loginView.classList.add("hidden");
+  appView.classList.remove("hidden");
+  loadDashboard();
 }
 
-// ADD
+// NAVIGATION
+function showPage(p){
+  pageDashboard.classList.add("hidden");
+  pageTransaksi.classList.add("hidden");
+
+  if(p==="dashboard") pageDashboard.classList.remove("hidden");
+  if(p==="transaksi") pageTransaksi.classList.remove("hidden");
+}
+
+// ADD TRANSAKSI
 async function add(){
   const r = await gas("addTransaction",{
-    nama: nama.value,
-    hp: hp.value,
-    berat: berat.value,
-    harga: harga.value
+    nama:nama.value,
+    hp:hp.value,
+    berat:berat.value,
+    harga:harga.value
   });
 
   out.innerHTML = "Kode: "+r.kode;
-  load();
+  loadDashboard();
 }
 
 // LOAD DASHBOARD
-async function load(){
+async function loadDashboard(){
   const r = await gas("getDashboard");
 
-  document.getElementById("income").innerText = r.data.summary.income;
-  document.getElementById("count").innerText = r.data.summary.count;
+  income.innerText = "Rp " + r.data.summary.income;
+  count.innerText = r.data.summary.count;
 
-  let html = "";
+  let html="";
 
   r.data.latest.forEach(t=>{
     html += `
-      <div class="border p-2 rounded flex justify-between">
+      <div class="flex justify-between border-b py-2">
         <div>
           <p class="font-bold">${t.kode}</p>
           <p class="text-sm text-gray-500">${t.nama}</p>
@@ -155,7 +182,7 @@ async function load(){
     `;
   });
 
-  document.getElementById("list").innerHTML = html;
+  list.innerHTML = html;
 }
 
 // LOGOUT
@@ -165,7 +192,7 @@ function logout(){
 }
 
 // AUTO LOGIN
-window.onload = ()=>{
+window.onload=()=>{
   if(localStorage.getItem("u")){
     showApp();
   }
