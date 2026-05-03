@@ -2,40 +2,85 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Laundry System v2</title>
+<title>Laundry System</title>
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
-<body>
+<body class="bg-gray-100">
 
 <!-- LOGIN -->
-<div id="loginView">
-  <h3>Login</h3>
-  <input id="email" placeholder="email"><br>
-  <input id="password" type="password"><br>
-  <button onclick="doLogin()">Login</button>
+<div id="loginView" class="flex items-center justify-center h-screen">
+
+  <div class="bg-white p-6 rounded-xl shadow w-80">
+    <h2 class="text-xl font-bold mb-4 text-center">Login Laundry</h2>
+
+    <input id="email" placeholder="Email"
+      class="w-full mb-3 p-2 border rounded">
+
+    <input id="password" type="password" placeholder="Password"
+      class="w-full mb-3 p-2 border rounded">
+
+    <button onclick="doLogin()"
+      class="w-full bg-blue-500 text-white p-2 rounded">
+      Login
+    </button>
+  </div>
+
 </div>
 
 <!-- APP -->
-<div id="appView" style="display:none">
+<div id="appView" class="hidden p-4 max-w-md mx-auto">
 
-  <h3>Dashboard Laundry</h3>
-  <button onclick="logout()">Logout</button>
+  <!-- HEADER -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-lg font-bold">Dashboard Laundry</h2>
+    <button onclick="logout()" class="text-red-500">Logout</button>
+  </div>
 
-  <hr>
+  <!-- SUMMARY -->
+  <div class="grid grid-cols-2 gap-3 mb-4">
+    <div class="bg-white p-3 rounded shadow text-center">
+      <p class="text-sm text-gray-500">Income</p>
+      <p id="income" class="font-bold text-lg">0</p>
+    </div>
+    <div class="bg-white p-3 rounded shadow text-center">
+      <p class="text-sm text-gray-500">Transaksi</p>
+      <p id="count" class="font-bold text-lg">0</p>
+    </div>
+  </div>
 
-  <input id="nama" placeholder="nama"><br>
-  <input id="hp" placeholder="no wa"><br>
-  <input id="berat" placeholder="berat"><br>
-  <input id="harga" placeholder="harga"><br>
+  <!-- FORM -->
+  <div class="bg-white p-4 rounded shadow mb-4">
+    <h3 class="font-bold mb-2">Tambah Transaksi</h3>
 
-  <button onclick="add()">Simpan</button>
+    <input id="nama" placeholder="Nama"
+      class="w-full mb-2 p-2 border rounded">
 
-  <div id="out"></div>
+    <input id="hp" placeholder="No WA"
+      class="w-full mb-2 p-2 border rounded">
 
-  <hr>
+    <input id="berat" placeholder="Berat (kg)"
+      class="w-full mb-2 p-2 border rounded">
 
-  <h4>Dashboard</h4>
-  <div id="dash"></div>
+    <input id="harga" placeholder="Harga/kg"
+      class="w-full mb-2 p-2 border rounded">
+
+    <button onclick="add()"
+      class="w-full bg-green-500 text-white p-2 rounded">
+      Simpan
+    </button>
+
+    <div id="out" class="text-sm mt-2 text-green-600"></div>
+  </div>
+
+  <!-- LIST -->
+  <div class="bg-white p-4 rounded shadow">
+    <h3 class="font-bold mb-2">Transaksi Terbaru</h3>
+    <div id="list" class="space-y-2"></div>
+  </div>
 
 </div>
 
@@ -43,17 +88,12 @@
 
 const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 
-// GAS CALL (AMAN)
 async function gas(f,d={}){
   const r = await fetch(URL,{
     method:"POST",
     body:JSON.stringify({func:f,...d})
   });
-
-  const text = await r.text();
-  console.log("RAW:", text);
-
-  return JSON.parse(text);
+  return await r.json();
 }
 
 // LOGIN
@@ -63,33 +103,31 @@ async function doLogin(){
     password: document.getElementById("password").value
   });
 
-  console.log(r);
-
   if(r.success){
     localStorage.setItem("u",JSON.stringify(r.data));
     showApp();
   }else{
-    alert("Login gagal: " + r.message);
+    alert("Login gagal");
   }
 }
 
 // SHOW APP
 function showApp(){
-  document.getElementById("loginView").style.display="none";
-  document.getElementById("appView").style.display="block";
+  document.getElementById("loginView").classList.add("hidden");
+  document.getElementById("appView").classList.remove("hidden");
   load();
 }
 
-// ADD TRANSAKSI
+// ADD
 async function add(){
   const r = await gas("addTransaction",{
-    nama: document.getElementById("nama").value,
-    hp: document.getElementById("hp").value,
-    berat: document.getElementById("berat").value,
-    harga: document.getElementById("harga").value
+    nama: nama.value,
+    hp: hp.value,
+    berat: berat.value,
+    harga: harga.value
   });
 
-  document.getElementById("out").innerHTML = "Kode: "+r.kode;
+  out.innerHTML = "Kode: "+r.kode;
   load();
 }
 
@@ -97,21 +135,27 @@ async function add(){
 async function load(){
   const r = await gas("getDashboard");
 
-  let h = `
-    <p>Income: ${r.data.summary.income}</p>
-    <p>Count: ${r.data.summary.count}</p>
-    <h5>Latest</h5>
-  `;
+  document.getElementById("income").innerText = r.data.summary.income;
+  document.getElementById("count").innerText = r.data.summary.count;
+
+  let html = "";
 
   r.data.latest.forEach(t=>{
-    h += `
-      <div>
-        ${t.kode} - ${t.nama} - ${t.status}
+    html += `
+      <div class="border p-2 rounded flex justify-between">
+        <div>
+          <p class="font-bold">${t.kode}</p>
+          <p class="text-sm text-gray-500">${t.nama}</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm">${t.status}</p>
+          <p class="font-bold">Rp ${t.total}</p>
+        </div>
       </div>
     `;
   });
 
-  document.getElementById("dash").innerHTML = h;
+  document.getElementById("list").innerHTML = html;
 }
 
 // LOGOUT
