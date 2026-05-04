@@ -268,7 +268,14 @@ async function add(){
     harga:harga.value
   });
 
-  out.innerHTML = "Kode: "+r.kode;
+  console.log("RESPONSE:", r);
+
+  if(r.success){
+    out.innerHTML = "Kode: " + (r.kode || "Tidak ada kode");
+  }else{
+    out.innerHTML = "Error: " + r.error;
+  }
+
   loadDashboard();
 }
 
