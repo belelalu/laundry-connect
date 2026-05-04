@@ -37,6 +37,54 @@
 
 </div>
 
+<!-- ================= MODAL CUCIAN BARU ================= -->
+<div id="modalCucian" class="hidden fixed inset-0 z-50 flex items-center justify-center">
+
+  <!-- BACKDROP -->
+  <div onclick="closeCucian()" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+
+  <!-- BOX -->
+  <div class="relative bg-white w-full max-w-2xl rounded-2xl shadow-lg p-6">
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold">Tambah Cucian Baru</h2>
+      <button onclick="closeCucian()" class="text-gray-400">✕</button>
+    </div>
+
+    <hr class="mb-4">
+
+    <!-- INFORMASI PELANGGAN -->
+    <p class="text-sm font-semibold text-teal-600 mb-2">Informasi Pelanggan</p>
+
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <input id="nama_cucian" placeholder="Nama Pelanggan" class="p-3 border rounded-xl">
+      <input id="hp_cucian" placeholder="No. WhatsApp" class="p-3 border rounded-xl">
+    </div>
+
+    <!-- DETAIL -->
+    <p class="text-sm font-semibold text-teal-600 mb-2">Detail Cucian</p>
+
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <input id="berat_cucian" placeholder="Berat (Kg)" class="p-3 border rounded-xl">
+      <input id="harga_cucian" placeholder="Harga" class="p-3 border rounded-xl">
+    </div>
+
+    <!-- KETERANGAN -->
+    <textarea id="ket_cucian" placeholder="Keterangan (Optional)"
+      class="w-full p-3 border rounded-xl mb-4 h-28"></textarea>
+
+    <!-- ACTION -->
+    <div class="flex justify-end gap-2">
+      <button onclick="closeCucian()">Batal</button>
+      <button onclick="saveCucian()" class="bg-teal-600 text-white px-4 py-2 rounded-xl">
+        Simpan
+      </button>
+    </div>
+
+  </div>
+</div>
+  
 <!-- ================= LOGIN ================= -->
 <div id="loginView" class="flex h-screen">
 
