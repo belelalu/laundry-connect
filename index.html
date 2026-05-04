@@ -261,12 +261,11 @@ customerSelect.onchange = () => {
 // ================= TRANSAKSI =================
 async function add(){
 
-    // ✅ VALIDASI DI SINI
   if(!customerSelect.value){
     alert("Pilih pelanggan dulu!");
     return;
   }
-  
+
   const r = await gas("addTransaction",{
     customer_id: customerSelect.value,
     nama:nama.value,
@@ -278,7 +277,21 @@ async function add(){
   console.log("RESPONSE:", r);
 
   if(r.success){
-    out.innerHTML = "Kode: " + (r.kode || "Tidak ada kode");
+    // ✅ tampilkan kode dengan lebih proper
+    out.innerHTML = `
+      <div class="bg-green-100 text-green-700 p-3 rounded-xl">
+        Transaksi berhasil<br>
+        <b>Kode: ${r.kode}</b>
+      </div>
+    `;
+
+    // ✅ RESET FORM
+    customerSelect.value = "";
+    nama.value = "";
+    hp.value = "";
+    berat.value = "";
+    harga.value = "";
+
   }else{
     out.innerHTML = "Error: " + r.error;
   }
