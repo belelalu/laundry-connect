@@ -262,7 +262,7 @@ customerSelect.onchange = () => {
 async function add(){
 
   if(!customerSelect.value){
-    alert("Pilih pelanggan dulu!");
+    showToast("Pilih pelanggan dulu!", "error");
     return;
   }
 
@@ -277,15 +277,10 @@ async function add(){
   console.log("RESPONSE:", r);
 
   if(r.success){
-    // ✅ tampilkan kode dengan lebih proper
-    out.innerHTML = `
-      <div class="bg-green-100 text-green-700 p-3 rounded-xl">
-        Transaksi berhasil<br>
-        <b>Kode: ${r.kode}</b>
-      </div>
-    `;
 
-    // ✅ RESET FORM
+    showToast("Transaksi berhasil! Kode: " + r.kode, "success");
+
+    // reset form
     customerSelect.value = "";
     nama.value = "";
     hp.value = "";
@@ -293,7 +288,7 @@ async function add(){
     harga.value = "";
 
   }else{
-    out.innerHTML = "Error: " + r.error;
+    showToast("Error: " + r.error, "error");
   }
 
   loadDashboard();
