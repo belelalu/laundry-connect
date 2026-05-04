@@ -58,7 +58,22 @@
     <p class="text-sm font-semibold text-teal-600 mb-2">Informasi Pelanggan</p>
 
     <div class="grid grid-cols-2 gap-3 mb-4">
-      <input id="nama_cucian" placeholder="Nama Pelanggan" class="p-3 border rounded-xl">
+        <div class="relative mb-3">
+
+            <input 
+              id="nama_cucian"
+              placeholder="Nama Pelanggan"
+              class="w-full p-3 border rounded-xl"
+              oninput="searchCustomer(this.value)"
+              autocomplete="off"
+            >
+          
+            <!-- SUGGESTION BOX -->
+            <div id="suggestBox"
+              class="absolute z-[9999] bg-white border rounded-xl w-full mt-1 hidden max-h-40 overflow-auto shadow-lg">
+            </div>
+          
+          </div>
       <input id="hp_cucian" placeholder="No. WhatsApp" class="p-3 border rounded-xl">
     </div>
 
