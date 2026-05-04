@@ -260,6 +260,13 @@ customerSelect.onchange = () => {
 
 // ================= TRANSAKSI =================
 async function add(){
+
+    // ✅ VALIDASI DI SINI
+  if(!customerSelect.value){
+    alert("Pilih pelanggan dulu!");
+    return;
+  }
+  
   const r = await gas("addTransaction",{
     customer_id: customerSelect.value,
     nama:nama.value,
