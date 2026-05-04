@@ -91,7 +91,7 @@
         Dashboard
       </button>
 
-      <button onclick="showPage('transaksi')" 
+      <button onclick="openCucian()"
         class="block w-full text-left p-2 rounded-lg hover:bg-gray-100">
         Data Cucian
       </button>
@@ -233,6 +233,31 @@
 </div>
 
 <script>
+
+  // ================= MODAL CUCIAN =================
+function openCucian(){
+  modalCucian.classList.remove("hidden");
+}
+
+function closeCucian(){
+  modalCucian.classList.add("hidden");
+}
+
+// SIMPAN (sementara pakai fungsi lama)
+async function saveCucian(){
+
+  const r = await gas("addTransaction",{
+    nama: nama_cucian.value,
+    hp: hp_cucian.value,
+    berat: berat_cucian.value,
+    harga: harga_cucian.value
+  });
+
+  alert("Cucian berhasil ditambahkan");
+
+  closeCucian();
+  loadDashboard();
+}
 
 const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 
