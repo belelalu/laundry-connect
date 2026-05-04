@@ -10,7 +10,7 @@
 
 <body class="bg-gray-100">
 
-  <!-- MODAL PELANGGAN -->
+<!-- ================= MODAL PELANGGAN ================= -->
 <div id="modalCustomer" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
 
   <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-lg">
@@ -40,7 +40,6 @@
 <!-- ================= LOGIN ================= -->
 <div id="loginView" class="flex h-screen">
 
-  <!-- LEFT -->
   <div class="hidden md:flex w-1/2 bg-gradient-to-br from-cyan-700 to-teal-500 text-white p-10 flex-col justify-center">
     <h1 class="text-4xl font-bold mb-4">Laundry Connect</h1>
     <p class="text-lg opacity-90">
@@ -48,7 +47,6 @@
     </p>
   </div>
 
-  <!-- RIGHT -->
   <div class="flex w-full md:w-1/2 items-center justify-center">
     <div class="bg-white p-8 rounded-2xl shadow w-80">
 
@@ -87,6 +85,10 @@
       🧾 Transaksi
     </button>
 
+    <button onclick="openCustomer()" class="block mb-3 w-full text-left p-2 rounded hover:bg-gray-100">
+      👤 + Pelanggan
+    </button>
+
     <button onclick="logout()" class="mt-10 text-red-500">
       Logout
     </button>
@@ -100,7 +102,6 @@
 
       <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
-      <!-- CARDS -->
       <div class="grid md:grid-cols-3 gap-4 mb-6">
 
         <div class="bg-white p-5 rounded-2xl shadow">
@@ -120,7 +121,6 @@
 
       </div>
 
-      <!-- LIST -->
       <div class="bg-white p-5 rounded-2xl shadow">
         <h3 class="font-bold mb-3">Transaksi Terbaru</h3>
         <div id="list"></div>
@@ -134,6 +134,10 @@
       <h2 class="text-2xl font-bold mb-4">Tambah Transaksi</h2>
 
       <div class="bg-white p-5 rounded-2xl shadow max-w-md">
+
+        <!-- DROPDOWN PELANGGAN -->
+        <select id="customerSelect"
+          class="w-full mb-3 p-3 border rounded-xl"></select>
 
         <input id="nama" placeholder="Nama"
           class="w-full mb-3 p-3 border rounded-xl">
@@ -165,7 +169,9 @@
 
 const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 
-// API CALL
+let customers = [];
+
+// ================= API =================
 async function gas(f,d={}){
   const r = await fetch(URL,{
     method:"POST",
@@ -174,7 +180,7 @@ async function gas(f,d={}){
   return await r.json();
 }
 
-// LOGIN
+// ================= LOGIN =================
 async function doLogin(){
   const r = await gas("login",{
     email: email.value,
@@ -189,14 +195,15 @@ async function doLogin(){
   }
 }
 
-// SHOW APP
+// ================= SHOW APP =================
 function showApp(){
   loginView.classList.add("hidden");
   appView.classList.remove("hidden");
   loadDashboard();
+  loadCustomers();
 }
 
-// NAVIGATION
+// ================= NAVIGATION =================
 function showPage(p){
   pageDashboard.classList.add("hidden");
   pageTransaksi.classList.add("hidden");
@@ -205,9 +212,56 @@ function showPage(p){
   if(p==="transaksi") pageTransaksi.classList.remove("hidden");
 }
 
-// ADD TRANSAKSI
+// ================= CUSTOMER =================
+function openCustomer(){
+  modalCustomer.classList.remove("hidden");
+}
+
+function closeCustomer(){
+  modalCustomer.classList.add("hidden");
+}
+
+async function saveCustomer(){
+  const r = await gas("addCustomer",{
+    nama: c_nama.value,
+    hp: c_hp.value,
+    alamat: c_alamat.value
+  });
+
+  if(r.success){
+    alert("Pelanggan tersimpan");
+    closeCustomer();
+    loadCustomers();
+  }
+}
+
+async function loadCustomers(){
+  const r = await gas("getCustomers");
+
+  customers = r.data;
+
+  let html = "<option value=''>Pilih Pelanggan</option>";
+
+  customers.forEach(c=>{
+    html += `<option value="${c.id}">${c.nama} (${c.hp})</option>`;
+  });
+
+  customerSelect.innerHTML = html;
+}
+
+// AUTO FILL
+customerSelect.onchange = () => {
+  const c = customers.find(x => x.id == customerSelect.value);
+  if(c){
+    nama.value = c.nama;
+    hp.value = c.hp;
+  }
+};
+
+// ================= TRANSAKSI =================
 async function add(){
   const r = await gas("addTransaction",{
+    customer_id: customerSelect.value,
     nama:nama.value,
     hp:hp.value,
     berat:berat.value,
@@ -218,7 +272,7 @@ async function add(){
   loadDashboard();
 }
 
-// LOAD DASHBOARD
+// ================= DASHBOARD =================
 async function loadDashboard(){
   const r = await gas("getDashboard");
 
@@ -251,13 +305,13 @@ async function loadDashboard(){
   list.innerHTML = html;
 }
 
-// LOGOUT
+// ================= LOGOUT =================
 function logout(){
   localStorage.clear();
   location.reload();
 }
 
-// AUTO LOGIN
+// ================= AUTO LOGIN =================
 window.onload=()=>{
   if(localStorage.getItem("u")){
     showApp();
