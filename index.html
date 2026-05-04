@@ -353,6 +353,68 @@ function showPage(p){
 }
 
 // ================= CUSTOMER =================
+
+function searchCustomer(keyword){
+
+  const box = document.getElementById("suggestBox");
+
+  if(!keyword){
+    box.classList.add("hidden");
+    box.innerHTML = "";
+    return;
+  }
+
+  const filtered = customers.filter(c =>
+    c.nama.toLowerCase().includes(keyword.toLowerCase())
+  );
+
+  if(filtered.length === 0){
+    box.innerHTML = `<div class="p-2 text-gray-400">Tidak ditemukan</div>`;
+    box.classList.remove("hidden");
+    return;
+  }
+
+  let html = "";
+
+  filtered.forEach(c=>{
+    html += `
+      <div 
+        class="p-2 hover:bg-gray-100 cursor-pointer"
+        onclick="selectCustomer('${c.id}')"
+      >
+        <div class="font-semibold">${c.nama}</div>
+        <div class="text-xs text-gray-500">${c.hp}</div>
+      </div>
+    `;
+  });
+
+  box.innerHTML = html;
+  box.classList.remove("hidden");
+}
+
+function selectCustomer(id){
+
+  const c = customers.find(x => x.id == id);
+
+  if(!c) return;
+
+  nama_cucian.value = c.nama;
+  hp_cucian.value = c.hp;
+
+  document.getElementById("suggestBox").classList.add("hidden");
+}
+
+document.addEventListener("click", function(e){
+
+  const box = document.getElementById("suggestBox");
+  const input = document.getElementById("nama_cucian");
+
+  if(!box.contains(e.target) && e.target !== input){
+    box.classList.add("hidden");
+  }
+
+});
+  
 function openCustomer(){
   modalCustomer.classList.remove("hidden");
 }
