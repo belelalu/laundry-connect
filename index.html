@@ -235,12 +235,12 @@
 <script>
 
   // ================= MODAL CUCIAN =================
-function openCucian(){
-  modalCucian.classList.remove("hidden");
+window.openCucian = function(){
+  document.getElementById("modalCucian").classList.remove("hidden");
 }
 
-function closeCucian(){
-  modalCucian.classList.add("hidden");
+window.closeCucian = function(){
+  document.getElementById("modalCucian").classList.add("hidden");
 }
 
 // SIMPAN (sementara pakai fungsi lama)
