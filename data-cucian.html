@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Cucian</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="flex">
+
+  <!-- SIDEBAR -->
+  <div class="w-64 bg-white h-screen p-4 shadow">
+    <h1 class="text-xl font-bold mb-6">Laundry Connect</h1>
+
+    <div class="space-y-2">
+      <a href="index.html" class="block p-2 rounded hover:bg-gray-100">Dashboard</a>
+      <a href="data-cucian.html" class="block p-2 rounded bg-blue-100 text-blue-600">Data Cucian</a>
+      <a href="#" class="block p-2 rounded hover:bg-gray-100">Keuangan</a>
+      <a href="#" class="block p-2 rounded hover:bg-gray-100">Pengaturan</a>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1 p-6">
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Manajemen Laundry</h2>
+
+      <button class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+        + Cucian Baru
+      </button>
+    </div>
+
+    <!-- SEARCH & FILTER -->
+    <div class="flex gap-4 mb-4">
+      <input type="text" placeholder="Cari No. Laundry atau Nama..."
+        class="border rounded-lg px-4 py-2 w-1/3">
+
+      <select class="border rounded-lg px-4 py-2">
+        <option>Semua Status</option>
+        <option>Menunggu</option>
+        <option>Dicuci</option>
+        <option>Selesai</option>
+        <option>Sudah Diambil</option>
+      </select>
+    </div>
+
+    <!-- TABLE -->
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100">
+          <tr class="text-left">
+            <th class="p-3">No. Laundry</th>
+            <th class="p-3">Nama Pelanggan</th>
+            <th class="p-3">Status</th>
+            <th class="p-3">Biaya</th>
+            <th class="p-3">Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr class="border-t">
+            <td class="p-3 font-semibold">LC-001</td>
+            <td class="p-3">Budi</td>
+            <td class="p-3">
+              <span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-xs">
+                Menunggu
+              </span>
+            </td>
+            <td class="p-3">Rp 15.000</td>
+            <td class="p-3 flex gap-2">
+              <button class="bg-gray-200 px-2 py-1 rounded">🖨</button>
+              <button class="bg-blue-200 px-2 py-1 rounded">✏</button>
+              <button class="bg-red-200 px-2 py-1 rounded">🗑</button>
+            </td>
+          </tr>
+
+          <tr class="border-t">
+            <td class="p-3 font-semibold">LC-002</td>
+            <td class="p-3">Siti</td>
+            <td class="p-3">
+              <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">
+                Selesai
+              </span>
+            </td>
+            <td class="p-3">Rp 25.000</td>
+            <td class="p-3 flex gap-2">
+              <button class="bg-gray-200 px-2 py-1 rounded">🖨</button>
+              <button class="bg-blue-200 px-2 py-1 rounded">✏</button>
+              <button class="bg-red-200 px-2 py-1 rounded">🗑</button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
