@@ -520,19 +520,21 @@
       }
 
       async function saveCustomer() {
-        // format dulu (biar aman)
+        // format dulu
         c_no_wa.value = formatWA(c_no_wa.value);
 
+        // validasi nama
         if (!c_nama.value.trim()) {
           alert("Nama pelanggan wajib diisi");
           return;
         }
 
-        // VALIDASI DI DEPAN
+        // validasi nomor
         if (!c_no_wa.value.startsWith("+62") || c_no_wa.value.length < 12) {
           alert("Nomor WhatsApp tidak valid");
           return;
         }
+
         const r = await gas("addCustomer", {
           nama: c_nama.value,
           no_wa: c_no_wa.value,
@@ -542,15 +544,17 @@
         if (r.success) {
           alert("Pelanggan tersimpan");
 
-          // auto isi ke form cucian
+          // isi otomatis ke cucian
           nama_cucian.value = c_nama.value;
           hp_cucian.value = c_no_wa.value;
 
+          // reset form
           c_nama.value = "";
           c_no_wa.value = "";
           c_alamat.value = "";
 
           closeCustomer();
+          openCucian(); // ⬅️ ini bikin UX lebih halus
           loadCustomers();
         }
       }
