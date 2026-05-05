@@ -424,6 +424,32 @@
 
       // ================= CUSTOMER =================
 
+      function formatWA(input) {
+        let wa = input.trim();
+
+        // hapus spasi & karakter aneh
+        wa = wa.replace(/[^0-9+]/g, "");
+
+        // jika diawali 08 → ubah ke +628
+        if (wa.startsWith("08")) {
+          wa = "+62" + wa.substring(1);
+        }
+
+        // jika diawali 8 → anggap 08
+        else if (wa.startsWith("8")) {
+          wa = "+62" + wa;
+        }
+
+        // jika diawali 62 → tambah +
+        else if (wa.startsWith("62")) {
+          wa = "+" + wa;
+        }
+
+        // jika sudah +62 → biarkan
+
+        return wa;
+      }      
+
       function searchCustomer(keyword) {
         const box = document.getElementById("suggestBox");
 
