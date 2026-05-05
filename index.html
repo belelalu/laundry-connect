@@ -9,44 +9,33 @@
   </head>
 
   <body class="bg-gray-100">
-    <!-- ================= MODAL PELANGGAN ================= -->
-    <div
-      id="modalCustomer"
-      class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center"
-    >
-      <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-lg">
-        <h2 class="text-xl font-bold mb-4">Tambah Pelanggan</h2>
+<!-- ================= MODAL PELANGGAN ================= -->
+<div id="modalCustomer"
+     class="hidden fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
 
-        <input
-          id="c_nama"
-          placeholder="Nama Pelanggan"
-          class="w-full mb-3 p-3 border rounded-xl"
-        />
+  <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-lg relative z-50">
 
-        <input
-          id="c_no_wa"
-          placeholder="No WhatsApp"
-          oninput="this.value = formatWA(this.value)"
-          class="w-full mb-3 p-3 border rounded-xl"
-        />
+    <h2 class="text-xl font-bold mb-4">Tambah Pelanggan</h2>
 
-        <textarea
-          id="c_alamat"
-          placeholder="Alamat"
-          class="w-full mb-3 p-3 border rounded-xl"
-        ></textarea>
+    <input id="c_nama" placeholder="Nama Pelanggan"
+      class="w-full mb-3 p-3 border rounded-xl">
 
-        <div class="flex justify-end gap-2">
-          <button onclick="closeCustomer()" class="px-4 py-2">Batal</button>
-          <button
-            onclick="saveCustomer()"
-            class="bg-teal-600 text-white px-4 py-2 rounded-xl"
-          >
-            Simpan
-          </button>
-        </div>
-      </div>
+    <input id="c_hp" placeholder="No WhatsApp"
+      class="w-full mb-3 p-3 border rounded-xl">
+
+    <textarea id="c_alamat" placeholder="Alamat"
+      class="w-full mb-3 p-3 border rounded-xl"></textarea>
+
+    <div class="flex justify-end gap-2">
+      <button onclick="closeCustomer()" class="px-4 py-2">Batal</button>
+      <button onclick="saveCustomer()" class="bg-teal-600 text-white px-4 py-2 rounded-xl">
+        Simpan
+      </button>
     </div>
+
+  </div>
+
+</div>
 
     <!-- ================= MODAL CUCIAN BARU ================= -->
     
