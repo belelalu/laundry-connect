@@ -20,7 +20,7 @@
     <input id="c_nama" placeholder="Nama Pelanggan"
       class="w-full mb-3 p-3 border rounded-xl">
 
-    <input id="c_hp" placeholder="No WhatsApp"
+    <input id="c_no_wa" placeholder="No WhatsApp"
       class="w-full mb-3 p-3 border rounded-xl">
 
     <textarea id="c_alamat" placeholder="Alamat"
@@ -272,7 +272,7 @@
         <input id="nama" placeholder="Nama"
           class="w-full mb-3 p-3 border rounded-xl">
 
-        <input id="hp" placeholder="No WhatsApp"
+        <input id="no_wa" placeholder="No WhatsApp"
           class="w-full mb-3 p-3 border rounded-xl">
 
         <input id="berat" placeholder="Berat (Kg)"
@@ -311,7 +311,7 @@ async function saveCucian(){
 
   const r = await gas("addTransaction",{
     nama: nama_cucian.value,
-    hp: hp_cucian.value,
+    no_wa: hp_cucian.value,
     berat: berat_cucian.value,
     harga: harga_cucian.value
   });
@@ -398,7 +398,7 @@ function searchCustomer(keyword){
         onclick="selectCustomer('${c.id}')"
       >
         <div class="font-semibold">${c.nama}</div>
-        <div class="text-xs text-gray-500">${c.hp}</div>
+        <div class="text-xs text-gray-500">${c.no_wa}</div>
       </div>
     `;
   });
@@ -414,7 +414,7 @@ function selectCustomer(id){
   if(!c) return;
 
   nama_cucian.value = c.nama;
-  hp_cucian.value = c.hp;
+  hp_cucian.value = c.no_wa;
 
   document.getElementById("suggestBox").classList.add("hidden");
 }
@@ -441,7 +441,7 @@ function closeCustomer(){
 async function saveCustomer(){
   const r = await gas("addCustomer",{
     nama: c_nama.value,
-    hp: c_hp.value,
+    no_wa: c_hp.value,
     alamat: c_alamat.value
   });
 
@@ -460,7 +460,7 @@ async function loadCustomers(){
   let html = "<option value=''>Pilih Pelanggan</option>";
 
   customers.forEach(c=>{
-    html += `<option value="${c.id}">${c.nama} (${c.hp})</option>`;
+    html += `<option value="${c.id}">${c.nama} (${c.no_wa})</option>`;
   });
 
   customerSelect.innerHTML = html;
@@ -471,7 +471,7 @@ customerSelect.onchange = () => {
   const c = customers.find(x => x.id == customerSelect.value);
   if(c){
     nama.value = c.nama;
-    hp.value = c.hp;
+    hp.value = c.no_wa;
   }
 };
 
@@ -480,7 +480,7 @@ async function add(){
   const r = await gas("addTransaction",{
     customer_id: customerSelect.value,
     nama:nama.value,
-    hp:hp.value,
+    no_wa:hp.value,
     berat:berat.value,
     harga:harga.value
   });
