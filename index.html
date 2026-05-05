@@ -447,6 +447,11 @@ async function saveCustomer(){
 
   if(r.success){
     alert("Pelanggan tersimpan");
+
+    // auto isi ke form cucian
+    nama_cucian.value = c_nama.value;
+    hp_cucian.value = c_no_wa.value;
+
     closeCustomer();
     loadCustomers();
   }
