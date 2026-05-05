@@ -559,6 +559,21 @@
         }
       }
 
+      function resetCucianForm() {
+        nama_cucian.value = "";
+        hp_cucian.value = "";
+        berat_cucian.value = "";
+        harga_cucian.value = "";
+        ket_cucian.value = "";
+
+        // kalau pakai autocomplete
+        const box = document.getElementById("suggestBox");
+        if (box) {
+          box.classList.add("hidden");
+          box.innerHTML = "";
+        }
+      }      
+
       async function loadCustomers() {
         const r = await gas("getCustomers");
 
@@ -656,7 +671,11 @@
 
       // ================= MODAL CUCIAN =================
       function openCucian() {
+        resetCucianForm(); // ⬅️ ini yang penting
         document.getElementById("modalCucian").classList.remove("hidden");
+
+        // bonus biar langsung bisa ketik
+        nama_cucian.focus();
       }
 
       function closeCucian() {
