@@ -441,7 +441,7 @@ function closeCustomer(){
 async function saveCustomer(){
   const r = await gas("addCustomer",{
     nama: c_nama.value,
-    no_wa: c_hp.value,
+    no_wa: c_no_wa.value,
     alamat: c_alamat.value
   });
 
