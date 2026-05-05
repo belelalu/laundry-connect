@@ -82,27 +82,33 @@
         </div>
 
         <div class="grid grid-cols-2 gap-3 mb-4">
-          <div class="relative mb-3">
+
+          <!-- KIRI -->
+          <div class="relative">
             <input
               id="nama_cucian"
               placeholder="Nama Pelanggan"
-              class="w-full p-3 border rounded-xl"
+              class="w-full p-3 border rounded-xl h-12"
               oninput="searchCustomer(this.value)"
               autocomplete="off"
             />
-
-            <!-- SUGGESTION BOX -->
+        
             <div
               id="suggestBox"
               class="absolute z-[9999] bg-white border rounded-xl w-full mt-1 hidden max-h-40 overflow-auto shadow-lg"
             ></div>
           </div>
-          <input
-            id="hp_cucian"
-            placeholder="No. WhatsApp"
-            oninput="this.value = formatWA(this.value)"
-            class="p-3 border rounded-xl"
-          />
+        
+          <!-- KANAN -->
+          <div class="relative">
+            <input
+              id="hp_cucian"
+              placeholder="No. WhatsApp"
+              oninput="this.value = formatWA(this.value)"
+              class="w-full p-3 border rounded-xl h-12"
+            />
+          </div>
+        
         </div>
 
         <!-- DETAIL -->
