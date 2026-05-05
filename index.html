@@ -29,7 +29,6 @@
           class="w-full mb-3 p-3 border rounded-xl"
         />
 
-
         <textarea
           id="c_alamat"
           placeholder="Alamat"
@@ -82,7 +81,6 @@
         </div>
 
         <div class="grid grid-cols-2 gap-3 mb-4">
-
           <!-- KIRI -->
           <div class="relative">
             <input
@@ -92,13 +90,13 @@
               oninput="searchCustomer(this.value)"
               autocomplete="off"
             />
-        
+
             <div
               id="suggestBox"
               class="absolute z-[9999] bg-white border rounded-xl w-full mt-1 hidden max-h-40 overflow-auto shadow-lg"
             ></div>
           </div>
-        
+
           <!-- KANAN -->
           <div class="relative">
             <input
@@ -108,7 +106,6 @@
               class="w-full p-3 border rounded-xl h-12"
             />
           </div>
-        
         </div>
 
         <!-- DETAIL -->
@@ -271,20 +268,22 @@
           <!-- KARTU -->
           <div class="grid grid-cols-4 gap-4 mb-6">
             <!-- Cucian Masuk -->
-  <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
-    
-  <div class="absolute top-3 left-3 bg-blue-100 text-blue-600 p-4 rounded-lg text-sm">
-    ➕
-  </div>
+            <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
+              <div
+                class="absolute top-3 left-3 bg-blue-100 text-blue-600 p-4 rounded-lg text-sm"
+              >
+                ➕
+              </div>
 
-  <p id="masuk" class="text-4xl font-bold">0</p>
-  <p class="text-gray-500 text-sm">Cucian Masuk</p>
-
-</div>
+              <p id="masuk" class="text-4xl font-bold">0</p>
+              <p class="text-gray-500 text-sm">Cucian Masuk</p>
+            </div>
 
             <!-- Sedang Dikerjakan -->
             <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
-    <div class="absolute top-3 left-3 bg-yellow-100 text-yellow-600 p-4 rounded-lg text-sm">
+              <div
+                class="absolute top-3 left-3 bg-yellow-100 text-yellow-600 p-4 rounded-lg text-sm"
+              >
                 ⚙️
               </div>
               <div>
@@ -295,7 +294,9 @@
 
             <!-- Cucian Selesai -->
             <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
-    <div class="absolute top-3 left-3 bg-green-100 text-green-600 p-4 rounded-lg text-sm">
+              <div
+                class="absolute top-3 left-3 bg-green-100 text-green-600 p-4 rounded-lg text-sm"
+              >
                 ✔️
               </div>
               <div>
@@ -306,7 +307,9 @@
 
             <!-- Pendapatan -->
             <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
-    <div class="absolute top-3 left-3 bg-teal-100 text-teal-600 p-4 rounded-lg text-sm">
+              <div
+                class="absolute top-3 left-3 bg-teal-100 text-teal-600 p-4 rounded-lg text-sm"
+              >
                 💰
               </div>
               <div>
@@ -482,7 +485,7 @@
         // jika sudah +62 → biarkan
 
         return wa;
-      }      
+      }
 
       function searchCustomer(keyword) {
         const box = document.getElementById("suggestBox");
@@ -603,7 +606,7 @@
           box.classList.add("hidden");
           box.innerHTML = "";
         }
-      }      
+      }
 
       async function loadCustomers() {
         const r = await gas("getCustomers");
