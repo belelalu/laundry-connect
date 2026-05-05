@@ -475,7 +475,8 @@
       });
 
       function openCustomer() {
-        modalCustomer.classList.remove("hidden");
+        closeCucian(); // tutup modal cucian dulu
+        document.getElementById("modalCustomer").classList.remove("hidden");
       }
 
       function closeCustomer() {
