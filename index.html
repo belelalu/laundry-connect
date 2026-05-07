@@ -444,55 +444,177 @@
         if (p === "transaksi") pageTransaksi.classList.remove("hidden");
       }
 
-async function saveCustomer() {
-  try {
+      // ================= CUSTOMER =================
 
-    const formattedWA = formatWA(c_no_wa.value);
+      function formatWA(input) {
+        let wa = input.trim();
 
-    if (!formattedWA) {
-      alert("Nomor WhatsApp tidak valid");
-      return;
-    }
+        // hapus spasi & karakter aneh
+        wa = wa.replace(/[^0-9+]/g, "");
 
-    c_no_wa.value = formattedWA;
+        // jika diawali 08 → ubah ke +628
+        if (wa.startsWith("08")) {
+          wa = "+62" + wa.substring(1);
+        }
 
-    if (!c_nama.value.trim()) {
-      alert("Nama pelanggan wajib diisi");
-      return;
-    }
+        // jika diawali 8 → anggap 08
+        else if (wa.startsWith("8")) {
+          wa = "+62" + wa;
+        }
 
-    const r = await gas("addCustomer", {
-      nama: c_nama.value,
-      no_wa: c_no_wa.value,
-      alamat: c_alamat.value,
-    });
+        // jika diawali 62 → tambah +
+        else if (wa.startsWith("62")) {
+          wa = "+" + wa;
+        }
 
-    console.log(r);
+        // jika sudah +62 → biarkan
 
-    if (r.success) {
+        return wa;
+      }
 
-      alert("Pelanggan tersimpan");
+      function searchCustomer(keyword) {
+        const box = document.getElementById("suggestBox");
 
-      document.getElementById("nama_cucian").value = c_nama.value;
-      document.getElementById("hp_cucian").value = c_no_wa.value;
+        if (!keyword) {
+          box.classList.add("hidden");
+          box.innerHTML = "";
+          return;
+        }
 
-      c_nama.value = "";
-      c_no_wa.value = "";
-      c_alamat.value = "";
+        const filtered = customers.filter((c) =>
+          c.nama.toLowerCase().includes(keyword.toLowerCase())
+        );
 
-      closeCustomer();
-      openCucian();
+        if (filtered.length === 0) {
+          box.innerHTML = `<div class="p-2 text-gray-400">Tidak ditemukan</div>`;
+          box.classList.remove("hidden");
+          return;
+        }
 
-      loadCustomers();
-    }
+        let html = "";
 
-  } catch(err) {
+        filtered.forEach((c) => {
+          html += `
+      <div 
+        class="p-2 hover:bg-gray-100 cursor-pointer"
+        onclick="selectCustomer('${c.id}')"
+      >
+        <div class="font-semibold">${c.nama}</div>
+        <div class="text-xs text-gray-500">${c.no_wa}</div>
+      </div>
+    `;
+        });
 
-    console.error(err);
+        box.innerHTML = html;
+        box.classList.remove("hidden");
+      }
 
-    alert("Gagal menyimpan pelanggan");
-  }
-}
+      function selectCustomer(id) {
+        const c = customers.find((x) => x.id == id);
+
+        if (!c) return;
+
+        nama_cucian.value = c.nama;
+        hp_cucian.value = c.no_wa;
+
+        document.getElementById("suggestBox").classList.add("hidden");
+      }
+
+      document.addEventListener("click", function (e) {
+        const box = document.getElementById("suggestBox");
+        const input = document.getElementById("nama_cucian");
+
+        if (!box.contains(e.target) && e.target !== input) {
+          box.classList.add("hidden");
+        }
+      });
+
+      function openCustomer() {
+        closeCucian(); // tutup modal cucian dulu
+        document.getElementById("modalCustomer").classList.remove("hidden");
+      }
+
+      function closeCustomer() {
+        modalCustomer.classList.add("hidden");
+      }
+
+      async function saveCustomer() {
+        // format dulu
+        c_no_wa.value = formatWA(c_no_wa.value);
+
+        // validasi nama
+        if (!c_nama.value.trim()) {
+          alert("Nama pelanggan wajib diisi");
+          return;
+        }
+
+        // validasi nomor
+        if (!c_no_wa.value.startsWith("+62") || c_no_wa.value.length < 12) {
+          alert("Nomor WhatsApp tidak valid");
+          return;
+        }
+
+        const r = await gas("addCustomer", {
+          nama: c_nama.value,
+          no_wa: c_no_wa.value,
+          alamat: c_alamat.value,
+        });
+
+        if (r.success) {
+          alert("Pelanggan tersimpan");
+
+          // isi otomatis ke cucian
+          nama_cucian.value = c_nama.value;
+          hp_cucian.value = c_no_wa.value;
+
+          // reset form
+          c_nama.value = "";
+          c_no_wa.value = "";
+          c_alamat.value = "";
+
+          closeCustomer();
+          openCucian(); // ⬅️ ini bikin UX lebih halus
+          loadCustomers();
+        }
+      }
+
+      function resetCucianForm() {
+        nama_cucian.value = "";
+        hp_cucian.value = "";
+        berat_cucian.value = "";
+        harga_cucian.value = "";
+        ket_cucian.value = "";
+
+        // kalau pakai autocomplete
+        const box = document.getElementById("suggestBox");
+        if (box) {
+          box.classList.add("hidden");
+          box.innerHTML = "";
+        }
+      }
+
+      async function loadCustomers() {
+        const r = await gas("getCustomers");
+
+        customers = r.data;
+
+        let html = "<option value=''>Pilih Pelanggan</option>";
+
+        customers.forEach((c) => {
+          html += `<option value="${c.id}">${c.nama} (${c.no_wa})</option>`;
+        });
+
+        customerSelect.innerHTML = html;
+      }
+
+      // AUTO FILL
+      customerSelect.onchange = () => {
+        const c = customers.find((x) => x.id == customerSelect.value);
+        if (c) {
+          nama.value = c.nama;
+          hp.value = c.no_wa;
+        }
+      };
 
       // ================= TRANSAKSI =================
       async function add() {
