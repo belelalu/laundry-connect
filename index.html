@@ -446,31 +446,44 @@
 
       // ================= CUSTOMER =================
 
-      function formatWA(input) {
-        let wa = input.trim();
+function formatWA(input) {
+  let wa = input.trim();
 
-        // hapus spasi & karakter aneh
-        wa = wa.replace(/[^0-9+]/g, "");
+  // hapus semua selain angka dan +
+  wa = wa.replace(/[^\d+]/g, "");
 
-        // jika diawali 08 → ubah ke +628
-        if (wa.startsWith("08")) {
-          wa = "+62" + wa.substring(1);
-        }
+  // jika ada lebih dari satu +
+  wa = wa.replace(/\+/g, (match, offset) => {
+    return offset === 0 ? "+" : "";
+  });
 
-        // jika diawali 8 → anggap 08
-        else if (wa.startsWith("8")) {
-          wa = "+62" + wa;
-        }
+  // ubah 08xxxx → +628xxxx
+  if (wa.startsWith("08")) {
+    wa = "+62" + wa.substring(1);
+  }
 
-        // jika diawali 62 → tambah +
-        else if (wa.startsWith("62")) {
-          wa = "+" + wa;
-        }
+  // ubah 8xxxx → +628xxxx
+  else if (wa.startsWith("8")) {
+    wa = "+62" + wa;
+  }
 
-        // jika sudah +62 → biarkan
+  // ubah 62xxxx → +62xxxx
+  else if (wa.startsWith("62")) {
+    wa = "+" + wa;
+  }
 
-        return wa;
-      }
+  // perbaiki +6208xxxx → +628xxxx
+  wa = wa.replace(/^\+620/, "+62");
+
+  // validasi minimal panjang nomor
+  const angkaOnly = wa.replace(/\D/g, "");
+
+  if (angkaOnly.length < 10 || angkaOnly.length > 15) {
+    return "";
+  }
+
+  return wa;
+}
 
       function searchCustomer(keyword) {
         const box = document.getElementById("suggestBox");
