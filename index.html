@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" >
-    <title>LaundryCONNECT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Laundry Connect</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="js/app.js"></script>
@@ -13,7 +13,7 @@
 <div id="modalCustomer"
      class="hidden fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
 
-  <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-lg">
+  <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-lg relative z-50">
 
     <h2 class="text-xl font-bold mb-4">Tambah Pelanggan</h2>
 
@@ -533,53 +533,50 @@
         closeCucian(); // tutup modal cucian dulu
         document.getElementById("modalCustomer").classList.remove("hidden");
       }
-      function openCustomer(){
-  document.getElementById("modalCustomer").classList.remove("hidden");
-}
 
       function closeCustomer() {
         modalCustomer.classList.add("hidden");
       }
 
-async function saveCustomer() {
-  // format dulu
-  c_no_wa.value = formatWA(c_no_wa.value);
+      async function saveCustomer() {
+        // format dulu
+        c_no_wa.value = formatWA(c_no_wa.value);
 
-  // validasi nama
-  if (!c_nama.value.trim()) {
-    alert("Nama pelanggan wajib diisi");
-    return;
-  }
+        // validasi nama
+        if (!c_nama.value.trim()) {
+          alert("Nama pelanggan wajib diisi");
+          return;
+        }
 
-  // validasi nomor
-  if (!c_no_wa.value.startsWith("+62") || c_no_wa.value.length < 12) {
-    alert("Nomor WhatsApp tidak valid");
-    return;
-  }
+        // validasi nomor
+        if (!c_no_wa.value.startsWith("+62") || c_no_wa.value.length < 12) {
+          alert("Nomor WhatsApp tidak valid");
+          return;
+        }
 
-  const r = await gas("addCustomer", {
-    nama: c_nama.value,
-    no_wa: c_no_wa.value,
-    alamat: c_alamat.value,
-  });
+        const r = await gas("addCustomer", {
+          nama: c_nama.value,
+          no_wa: c_no_wa.value,
+          alamat: c_alamat.value,
+        });
 
-  if (r.success) {
-    alert("Pelanggan tersimpan");
+        if (r.success) {
+          alert("Pelanggan tersimpan");
 
-    // isi otomatis ke cucian
-    nama_cucian.value = c_nama.value;
-    hp_cucian.value = c_no_wa.value;
+          // isi otomatis ke cucian
+          nama_cucian.value = c_nama.value;
+          hp_cucian.value = c_no_wa.value;
 
-    // reset form
-    c_nama.value = "";
-    c_no_wa.value = "";
-    c_alamat.value = "";
+          // reset form
+          c_nama.value = "";
+          c_no_wa.value = "";
+          c_alamat.value = "";
 
-    closeCustomer();
-    openCucian(); // ⬅️ ini bikin UX lebih halus
-    loadCustomers();
-  }
-}
+          closeCustomer();
+          openCucian(); // ⬅️ ini bikin UX lebih halus
+          loadCustomers();
+        }
+      }
 
       function resetCucianForm() {
         nama_cucian.value = "";
