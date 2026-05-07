@@ -538,45 +538,125 @@
         modalCustomer.classList.add("hidden");
       }
 
-      async function saveCustomer() {
-        // format dulu
-        c_no_wa.value = formatWA(c_no_wa.value);
+async function saveCustomer() {
 
-        // validasi nama
-        if (!c_nama.value.trim()) {
-          alert("Nama pelanggan wajib diisi");
-          return;
-        }
+  try {
 
-        // validasi nomor
-        if (!c_no_wa.value.startsWith("+62") || c_no_wa.value.length < 12) {
-          alert("Nomor WhatsApp tidak valid");
-          return;
-        }
+    const c_nama =
+      document.getElementById("c_nama");
 
-        const r = await gas("addCustomer", {
-          nama: c_nama.value,
-          no_wa: c_no_wa.value,
-          alamat: c_alamat.value,
-        });
+    const c_no_wa =
+      document.getElementById("c_no_wa");
 
-        if (r.success) {
-          alert("Pelanggan tersimpan");
+    const c_alamat =
+      document.getElementById("c_alamat");
 
-          // isi otomatis ke cucian
-          nama_cucian.value = c_nama.value;
-          hp_cucian.value = c_no_wa.value;
+    // VALIDASI NAMA
+    if (!c_nama.value.trim()) {
 
-          // reset form
-          c_nama.value = "";
-          c_no_wa.value = "";
-          c_alamat.value = "";
+      alert("Nama pelanggan wajib diisi");
 
-          closeCustomer();
-          openCucian(); // ⬅️ ini bikin UX lebih halus
-          loadCustomers();
-        }
+      c_nama.focus();
+
+      return;
+    }
+
+    // FORMAT WA
+    let wa = c_no_wa.value.trim();
+
+    // hapus selain angka
+    wa = wa.replace(/\D/g, "");
+
+    // 08 -> 628
+    if (wa.startsWith("08")) {
+
+      wa = "62" + wa.substring(1);
+
+    }
+
+    // 8 -> 628
+    else if (wa.startsWith("8")) {
+
+      wa = "62" + wa;
+
+    }
+
+    // jika sudah 62
+    else if (wa.startsWith("62")) {
+
+      wa = wa;
+
+    }
+
+    else {
+
+      alert("Nomor WhatsApp tidak valid");
+
+      c_no_wa.focus();
+
+      return;
+    }
+
+    wa = "+" + wa;
+
+    // tampilkan otomatis
+    c_no_wa.value = wa;
+
+    // ================= KIRIM =================
+    const r = await gas(
+      "addCustomer",
+      {
+        nama: c_nama.value,
+        no_wa: wa,
+        alamat: c_alamat.value
       }
+    );
+
+    console.log(r);
+
+    // ERROR
+    if (!r || !r.success) {
+
+      alert(
+        r?.error || "Gagal menyimpan pelanggan"
+      );
+
+      return;
+    }
+
+    // SUCCESS
+    alert("Pelanggan berhasil disimpan");
+
+    // AUTO FILL
+    document.getElementById("nama_cucian").value =
+      c_nama.value;
+
+    document.getElementById("hp_cucian").value =
+      wa;
+
+    // RESET
+    c_nama.value = "";
+    c_no_wa.value = "";
+    c_alamat.value = "";
+
+    // reload customer
+    await loadCustomers();
+
+    // tutup modal
+    closeCustomer();
+
+    // buka lagi modal cucian
+    openCucian();
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      "Terjadi kesalahan : " + err
+    );
+  }
+}
 
       function resetCucianForm() {
         nama_cucian.value = "";
