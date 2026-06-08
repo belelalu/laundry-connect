@@ -6,7 +6,7 @@ const API_URL =
 async function gas(func, data = {}) {
 
   const res = await fetch(
-    URL,
+    API_URL,
     {
       method: "POST",
       body: JSON.stringify({
