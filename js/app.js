@@ -1,5 +1,5 @@
 // URL APPS SCRIPT
-const URL =
+const API_URL =
   "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 
 // HELPER APPS SCRIPT
