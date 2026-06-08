@@ -7,7 +7,7 @@
 const URL = "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
 const kode = new URL(location.href).searchParams.get("kode");
 
-fetch(URL,{method:'POST',body:JSON.stringify({func:'getTracking',kode})})
+fetch(API_URL,{method:'POST',body:JSON.stringify({func:'getTracking',kode})})
 .then(r=>r.json())
 .then(d=>{
  if(!d.data){hasil.innerHTML='tidak ada';return;}
