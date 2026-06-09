@@ -34,7 +34,3 @@ async function loadTransactions() {
   }
 }
 
-return {
-  success: true,
-  data: list || []
-};
