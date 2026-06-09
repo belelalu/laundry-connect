@@ -25,7 +25,13 @@ function closeCustomer() {
 }
 
 function renderFormCucian() {
+  console.log("🔥 FORM BARU DIPAKAI");
+
   return `
+    <div style="border:2px solid red; padding:10px; margin:10px;">
+      FORM BARU AKTIF
+    </div>
+
     <form id="formCucian">
       <input id="nama" placeholder="Nama">
       <select id="jenis">
