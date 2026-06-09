@@ -1,52 +1,72 @@
 let customers = [];
 
 window.loadCustomers = async function loadCustomers() {
+
   const r = await gas("getCustomers");
 
   customers = r.data || [];
 
-  const select = document.getElementById("customerSelect");
+  // =====================
+  // DROPDOWN CUCIAN
+  // =====================
+
+  const select =
+    document.getElementById("customerSelect");
 
   if (select) {
+
     select.innerHTML =
       `<option value="">Pilih Pelanggan</option>` +
       customers.map(c =>
-        `<option value="${c.id}">${c.nama} (${c.no_wa})</option>`
+        `<option value="${c.id}">
+          ${c.nama} (${c.no_wa})
+        </option>`
       ).join("");
   }
-}
 
-window.searchCustomer = function searchCustomer(keyword) {
-  const box = document.getElementById("suggestBox");
-  if (!keyword) return box.classList.add("hidden");
+  // =====================
+  // TABEL PELANGGAN
+  // =====================
 
-  const result = customers.filter(c =>
-    c.nama.toLowerCase().includes(keyword.toLowerCase())
-  );
+  const tbody =
+    document.getElementById("tbodyCustomer");
 
-  if (!result.length) {
-    box.innerHTML = `<div class="p-2 text-gray-400">Tidak ditemukan</div>`;
-    box.classList.remove("hidden");
-    return;
+  if (tbody) {
+
+    tbody.innerHTML = customers.map(c => `
+
+      <tr class="border-b hover:bg-gray-50">
+
+        <td class="p-4">
+          ${c.nama}
+        </td>
+
+        <td class="p-4">
+          ${c.no_wa || "-"}
+        </td>
+
+        <td class="p-4">
+          ${c.alamat || "-"}
+        </td>
+
+        <td class="p-4">
+
+          <button
+            class="text-blue-600 mr-3">
+            Detail
+          </button>
+
+          <button
+            class="text-red-600">
+            Hapus
+          </button>
+
+        </td>
+
+      </tr>
+
+    `).join("");
+
   }
 
-  box.innerHTML = result.map(c => `
-    <div class="p-2 hover:bg-gray-100 cursor-pointer"
-      onclick="selectCustomer('${c.id}')">
-      <div class="font-semibold">${c.nama}</div>
-      <div class="text-xs text-gray-500">${c.no_wa}</div>
-    </div>
-  `).join("");
-
-  box.classList.remove("hidden");
-}
-
-window.selectCustomer = function selectCustomer(id) {
-  const c = customers.find(x => x.id == id);
-  if (!c) return;
-
-  nama_cucian.value = c.nama;
-  hp_cucian.value = c.no_wa;
-
-  document.getElementById("suggestBox").classList.add("hidden");
-}
+};
