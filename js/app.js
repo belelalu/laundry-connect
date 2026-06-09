@@ -68,6 +68,57 @@ function renderFormCucian() {
   `;
 }
 
+function renderDashboard() {
+  document.getElementById("app").innerHTML = `
+    <h3>Dashboard</h3>
+
+    ${renderFormCucian()}
+
+    <hr>
+
+    <div id="dataCucianList"></div>
+  `;
+
+  initFormCucian();
+}
+
+function renderDataCucian() {
+  document.getElementById("app").innerHTML = `
+    <h3>Data Cucian</h3>
+
+    ${renderFormCucian()}
+
+    <hr>
+
+    <div id="tableCucian"></div>
+  `;
+
+  initFormCucian();
+}
+
+function initFormCucian() {
+  const form = document.getElementById("formCucian");
+
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const data = {
+      nama: document.getElementById("nama").value,
+      jenis: document.getElementById("jenis").value,
+      berat: document.getElementById("berat").value,
+      catatan: document.getElementById("catatan").value
+    };
+
+    console.log("DATA CUCIAN:", data);
+
+    alert("Cucian berhasil disimpan!");
+    
+    form.reset();
+  });
+}
+
 // URL APPS SCRIPT
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
