@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Laundry Connect</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- JS MODULE (WAJIB URUT) -->
+  <script src="js/api.js" defer></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/dashboard.js" defer></script>
+  <script src="js/transaksi.js" defer></script>
+  <script src="js/customer.js" defer></script>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("u")) {
+        loadDashboard();
+        loadCustomers();
+        loadTransactions();
+      }
+    });
+  </script>
+</head>
+
+<body class="bg-gray-100">
+
+<!-- ================= LOGIN ================= -->
+<div id="loginView" class="flex h-screen">
+  <div class="hidden md:flex w-1/2 bg-gradient-to-br from-cyan-700 to-teal-500 text-white p-10 flex-col justify-center">
+    <h1 class="text-4xl font-bold mb-4">Laundry Connect</h1>
+    <p>Manajemen laundry modern</p>
+  </div>
+
+  <div class="flex w-full md:w-1/2 items-center justify-center">
+    <div class="bg-white p-8 rounded-2xl shadow w-80">
+      <input id="email" class="w-full mb-3 p-3 border rounded-xl" placeholder="Email">
+      <input id="password" type="password" class="w-full mb-3 p-3 border rounded-xl" placeholder="Password">
+
+      <button onclick="doLogin()" class="w-full bg-teal-600 text-white p-3 rounded-xl">
+        Login
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="appView" class="hidden flex min-h-screen bg-gray-100">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-white border-r flex flex-col">
+
+    <!-- Logo -->
+    <div class="p-6 text-3xl font-bold text-teal-700">
+      Laundry Connect
+    </div>
+
+    <!-- Menu -->
+    <div class="flex-1 px-4">
+
+      <p class="text-xs text-gray-400 uppercase mb-3">
+        Menu Utama
+      </p>
+
+      <div class="space-y-2">
+
+        <button
+          onclick="showPage('dashboard')"
+          class="w-full text-left px-4 py-3 rounded-xl bg-teal-100 text-teal-700 font-medium">
+          Dashboard
+        </button>
+
+        <button
+          onclick="showPage('transaksi')"
+          class="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-100">
+          Data Cucian
+        </button>
+
+        <button
+          onclick="showPage('keuangan')"
+          class="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-100">
+          Keuangan
+        </button>
+
+        <button
+          onclick="showPage('pengaturan')"
+          class="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-100">
+          Pengaturan
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- USER INFO -->
+    <div class="border-t p-4">
+
+      <div class="flex items-center gap-3 mb-4">
+
+        <div
+          id="userAvatar"
+          class="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold">
+          U
+        </div>
+
+        <div>
+          <div id="sidebarUserName" class="font-semibold">
+            Admin Laundry
+          </div>
+
+          <div id="sidebarUserRole" class="text-sm text-gray-500">
+            Administrator
+          </div>
+        </div>
+
+      </div>
+
+      <button
+        onclick="logout()"
+        class="w-full border border-red-300 text-red-600 py-3 rounded-xl hover:bg-red-50">
+        Keluar
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="flex-1 p-8">
+
+    <!-- DASHBOARD -->
+    <div id="pageDashboard">
+
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6">
+
+        <h1 class="text-4xl font-bold">
+          Dashboard
+        </h1>
+
+        <button
+          onclick="openCucian()"
+          class="bg-teal-600 text-white px-5 py-3 rounded-xl font-medium shadow">
+          + Cucian Baru
+        </button>
+
+      </div>
+
+      <!-- Statistik -->
+      <div class="grid grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-white rounded-2xl p-5 shadow">
+          <p class="text-gray-500">Cucian Masuk</p>
+          <h3 id="statMasuk" class="text-4xl font-bold mt-2">0</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow">
+          <p class="text-gray-500">Sedang Dikerjakan</p>
+          <h3 id="statProses" class="text-4xl font-bold mt-2">0</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow">
+          <p class="text-gray-500">Cucian Selesai</p>
+          <h3 id="statSelesai" class="text-4xl font-bold mt-2">0</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow">
+          <p class="text-gray-500">Pendapatan Hari Ini</p>
+          <h3 id="statPendapatan" class="text-4xl font-bold text-teal-700 mt-2">
+            Rp 0
+          </h3>
+        </div>
+
+      </div>
+
+      <!-- Grafik + Laporan -->
+      <div class="grid grid-cols-3 gap-6">
+
+        <!-- Grafik -->
+        <div class="col-span-2 bg-white rounded-2xl p-6 shadow">
+
+          <h3 class="font-bold text-2xl mb-4">
+            Tren Pendapatan Minggu Ini
+          </h3>
+
+          <canvas id="incomeChart" height="120"></canvas>
+
+        </div>
+
+        <!-- Cucian Selesai -->
+        <div class="bg-white rounded-2xl p-6 shadow">
+
+          <h3 class="font-bold text-2xl mb-4">
+            Cucian Selesai Terbaru
+          </h3>
+
+          <div id="recentFinished">
+
+            <div class="text-gray-500">
+              Belum ada data selesai
+            </div>
+
+          </div>
+
+          <button
+            class="w-full mt-6 border border-teal-600 text-teal-600 py-3 rounded-xl">
+            Lihat Semua Laporan
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DATA CUCIAN -->
+    <div id="pageTransaksi" class="hidden">
+      <!-- KEUANGAN -->
+      <div id="pageKeuangan" class="hidden">
+        <h2 class="text-3xl font-bold mb-6">
+          Keuangan
+        </h2>
+        
+        <div class="bg-white p-6 rounded-2xl shadow">
+          Modul Keuangan akan dibuat berikutnya.
+        </div>
+      </div>
+    
+    <!-- PENGATURAN -->
+      <div id="pagePengaturan" class="hidden">
+        <h2 class="text-3xl font-bold mb-6">
+          Pengaturan
+        </h2>
+        
+        <div class="bg-white p-6 rounded-2xl shadow">
+          Modul Pengaturan akan dibuat berikutnya.
+        </div>
+      </div>
+  </main>
+
+</div>
+
+</body>
+</html>
