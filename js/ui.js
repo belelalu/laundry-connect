@@ -58,6 +58,17 @@ window.showPage = function (page) {
 
       break;
 
+    case "pelanggan":
+      document
+        .getElementById("pagePelanggan")
+        .classList.remove("hidden");
+      
+      if (typeof loadCustomers === "function") {
+        loadCustomers();
+      }
+      
+      break;
+
     case "keuangan":
 
       const keuangan =
