@@ -48,50 +48,204 @@
 </div>
 
 <!-- ================= APP ================= -->
-<div id="appView" class="hidden flex">
+<div id="appView" class="hidden flex min-h-screen bg-gray-100">
 
   <!-- SIDEBAR -->
-  <div class="w-64 bg-white shadow min-h-screen">
-    <div class="p-5 font-bold text-teal-600">Laundry Connect</div>
+  <aside class="w-64 bg-white border-r flex flex-col">
 
-    <div class="p-4 space-y-2">
-      <button onclick="showPage('dashboard')" class="block w-full text-left">Dashboard</button>
-      <button onclick="showPage('transaksi')" class="block w-full text-left">Data Cucian</button>
+    <!-- Logo -->
+    <div class="p-6 text-3xl font-bold text-teal-700">
+      Laundry Connect
     </div>
-  </div>
+
+    <!-- Menu -->
+    <div class="flex-1 px-4">
+
+      <p class="text-xs text-gray-400 uppercase mb-3">
+        Menu Utama
+      </p>
+
+      <div class="space-y-2">
+
+        <button
+          onclick="showPage('dashboard')"
+          class="w-full text-left px-4 py-3 rounded-xl bg-teal-100 text-teal-700 font-medium">
+          Dashboard
+        </button>
+
+        <button
+          onclick="showPage('transaksi')"
+          class="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-100">
+          Data Cucian
+        </button>
+
+        <button
+          onclick="showPage('keuangan')"
+          class="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-100">
+          Keuangan
+        </button>
+
+        <button
+          onclick="showPage('pengaturan')"
+          class="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-100">
+          Pengaturan
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- USER INFO -->
+    <div class="border-t p-4">
+
+      <div class="flex items-center gap-3 mb-4">
+
+        <div class="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold">
+          AT
+        </div>
+
+        <div>
+          <div id="sidebarUserName" class="font-semibold">
+            Admin Laundry
+          </div>
+
+          <div id="sidebarUserRole" class="text-sm text-gray-500">
+            Administrator
+          </div>
+        </div>
+
+      </div>
+
+      <button
+        onclick="logout()"
+        class="w-full border border-red-300 text-red-600 py-3 rounded-xl hover:bg-red-50">
+        Keluar
+      </button>
+
+    </div>
+
+  </aside>
 
   <!-- CONTENT -->
-  <div class="flex-1 p-6">
+  <main class="flex-1 p-8">
 
     <!-- DASHBOARD -->
     <div id="pageDashboard">
-      <h2 class="text-2xl font-bold mb-4">Dashboard</h2>
 
-      <button onclick="openCucian()" class="bg-teal-600 text-white px-4 py-2 rounded-lg">
-        + Cucian Baru
-      </button>
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6">
 
-      <div id="dashboardContent"></div>
+        <h1 class="text-4xl font-bold">
+          Dashboard
+        </h1>
+
+        <button
+          onclick="openCucian()"
+          class="bg-teal-600 text-white px-5 py-3 rounded-xl font-medium shadow">
+          + Cucian Baru
+        </button>
+
+      </div>
+
+      <!-- Statistik -->
+      <div class="grid grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-white rounded-2xl p-5 shadow">
+          <p class="text-gray-500">Cucian Masuk</p>
+          <h3 id="statMasuk" class="text-4xl font-bold mt-2">0</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow">
+          <p class="text-gray-500">Sedang Dikerjakan</p>
+          <h3 id="statProses" class="text-4xl font-bold mt-2">0</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow">
+          <p class="text-gray-500">Cucian Selesai</p>
+          <h3 id="statSelesai" class="text-4xl font-bold mt-2">0</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow">
+          <p class="text-gray-500">Pendapatan Hari Ini</p>
+          <h3 id="statPendapatan" class="text-4xl font-bold text-teal-700 mt-2">
+            Rp 0
+          </h3>
+        </div>
+
+      </div>
+
+      <!-- Grafik + Laporan -->
+      <div class="grid grid-cols-3 gap-6">
+
+        <!-- Grafik -->
+        <div class="col-span-2 bg-white rounded-2xl p-6 shadow">
+
+          <h3 class="font-bold text-2xl mb-4">
+            Tren Pendapatan Minggu Ini
+          </h3>
+
+          <canvas id="incomeChart" height="120"></canvas>
+
+        </div>
+
+        <!-- Cucian Selesai -->
+        <div class="bg-white rounded-2xl p-6 shadow">
+
+          <h3 class="font-bold text-2xl mb-4">
+            Cucian Selesai Terbaru
+          </h3>
+
+          <div id="recentFinished">
+
+            <div class="text-gray-500">
+              Belum ada data selesai
+            </div>
+
+          </div>
+
+          <button
+            class="w-full mt-6 border border-teal-600 text-teal-600 py-3 rounded-xl">
+            Lihat Semua Laporan
+          </button>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- TRANSAKSI -->
+    <!-- DATA CUCIAN -->
     <div id="pageTransaksi" class="hidden">
-      <h2 class="text-2xl font-bold mb-4">Data Cucian</h2>
 
-      <table class="w-full bg-white">
-        <thead>
-          <tr>
-            <th>Kode</th>
-            <th>Nama</th>
-            <th>Status</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody id="tbodyTransaksi"></tbody>
-      </table>
+      <h2 class="text-3xl font-bold mb-6">
+        Data Cucian
+      </h2>
+
+      <div class="bg-white rounded-2xl shadow overflow-hidden">
+
+        <table class="w-full">
+
+          <thead class="bg-gray-100">
+
+            <tr>
+              <th class="p-4 text-left">Kode</th>
+              <th class="p-4 text-left">Nama</th>
+              <th class="p-4 text-left">Status</th>
+              <th class="p-4 text-left">Total</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="tbodyTransaksi"></tbody>
+
+        </table>
+
+      </div>
+
     </div>
 
-  </div>
+  </main>
+
 </div>
 
 </body>
