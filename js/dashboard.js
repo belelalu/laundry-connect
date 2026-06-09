@@ -1,4 +1,5 @@
 window.loadDashboard = async function () {
+
   const r = await gas("getDashboard");
 
   if (!r || !r.data) return;
@@ -6,55 +7,75 @@ window.loadDashboard = async function () {
   let masuk = 0;
   let proses = 0;
   let selesai = 0;
+  let pendapatan = 0;
 
-  let html = "";
+  let selesaiHtml = "";
 
   r.data.latest.forEach((t) => {
+
     if (t.status === "Masuk") masuk++;
+
     if (t.status === "Proses") proses++;
-    if (t.status === "Selesai") selesai++;
 
     if (t.status === "Selesai") {
-      html += `
-        <div class="flex justify-between border-b py-2">
+      selesai++;
+
+      pendapatan += Number(t.total || 0);
+
+      selesaiHtml += `
+        <div class="flex justify-between items-center border-b py-3">
+
           <div>
-            <p class="font-bold">${t.kode}</p>
-            <p class="text-xs text-gray-500">${t.nama}</p>
+            <div class="font-semibold">
+              ${t.nama}
+            </div>
+
+            <div class="text-sm text-gray-500">
+              ${t.kode}
+            </div>
           </div>
+
           <div class="text-right">
-            <p class="text-green-600 font-semibold">${t.status}</p>
-            <p class="font-bold">Rp ${t.total}</p>
+            <div class="font-bold">
+              Rp ${Number(t.total || 0).toLocaleString("id-ID")}
+            </div>
+
+            <div class="text-green-600 text-sm">
+              ${t.status}
+            </div>
           </div>
+
         </div>
       `;
     }
+
   });
 
-  const el = document.getElementById("dashboardContent");
+  // CARD STATISTIK
 
-  if (!el) return;
+  document.getElementById("statMasuk").innerText =
+    masuk;
 
-  el.innerHTML = `
-    <div class="grid grid-cols-3 gap-4 mb-4">
-      <div class="bg-white p-4 rounded-xl shadow">
-        <p class="text-gray-500">Masuk</p>
-        <p class="text-2xl font-bold">${masuk}</p>
+  document.getElementById("statProses").innerText =
+    proses;
+
+  document.getElementById("statSelesai").innerText =
+    selesai;
+
+  document.getElementById("statPendapatan").innerText =
+    "Rp " + pendapatan.toLocaleString("id-ID");
+
+  // CUCIAN SELESAI
+
+  document.getElementById("recentFinished").innerHTML =
+    selesaiHtml || `
+      <div class="text-gray-500">
+        Belum ada data selesai
       </div>
+    `;
 
-      <div class="bg-white p-4 rounded-xl shadow">
-        <p class="text-gray-500">Proses</p>
-        <p class="text-2xl font-bold">${proses}</p>
-      </div>
+  // CHART
 
-      <div class="bg-white p-4 rounded-xl shadow">
-        <p class="text-gray-500">Selesai</p>
-        <p class="text-2xl font-bold">${selesai}</p>
-      </div>
-    </div>
+  renderIncomeChart();
 
-    <div class="bg-white p-4 rounded-xl shadow">
-      <h3 class="font-bold mb-2">Cucian Selesai Terbaru</h3>
-      ${html || "<p class='text-gray-500'>Belum ada data</p>"}
-    </div>
-  `;
 };
