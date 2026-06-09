@@ -1,4 +1,4 @@
-window.gas = async function loadTransactions() {
+window.loadTransactions = async function loadTransactions() {
   const tbody = document.getElementById("tbodyTransaksi");
   if (!tbody) return;
 
