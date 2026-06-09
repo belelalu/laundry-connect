@@ -7,7 +7,7 @@ async function gas(func, data = {}) {
     ...data
   });
 
-  const res = await fetch(`${API_URL}?${params.toString()}`);
+  const res = await fetch(API_URL + "?" + params.toString());
 
   return await res.json();
 }
