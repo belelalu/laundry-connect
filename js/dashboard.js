@@ -79,3 +79,70 @@ window.loadDashboard = async function () {
   renderIncomeChart();
 
 };
+
+function renderIncomeChart() {
+
+  const canvas = document.getElementById("incomeChart");
+
+  if (!canvas) return;
+
+  if (window.dashboardChart) {
+    window.dashboardChart.destroy();
+  }
+
+  window.dashboardChart = new Chart(canvas, {
+
+    type: "line",
+
+    data: {
+
+      labels: [
+        "Min",
+        "Sen",
+        "Sel",
+        "Rab",
+        "Kam",
+        "Jum",
+        "Sab"
+      ],
+
+      datasets: [
+        {
+          label: "Pendapatan",
+
+          data: [
+            120000,
+            80000,
+            150000,
+            110000,
+            200000,
+            160000,
+            220000
+          ],
+
+          borderColor: "#0f766e",
+
+          backgroundColor: "rgba(15,118,110,0.1)",
+
+          fill: true,
+
+          tension: 0.4
+        }
+      ]
+    },
+
+    options: {
+
+      responsive: true,
+
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+
+    }
+
+  });
+
+}
