@@ -15,10 +15,11 @@ window.showApp = function () {
 };
 
 window.showPage = function (page) {
-
+  
   const pages = [
     "pageDashboard",
     "pageTransaksi",
+    "pagePelanggan",
     "pageKeuangan",
     "pagePengaturan"
   ];
