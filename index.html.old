@@ -1,1 +1,786 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Laundry Connect</title>
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/app.js"></script>
+  </head>
+
+  <body class="bg-gray-100">
+<!-- ================= MODAL PELANGGAN ================= -->
+<div id="modalCustomer"
+     class="hidden fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+
+  <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-lg relative z-50">
+
+    <h2 class="text-xl font-bold mb-4">Tambah Pelanggan</h2>
+
+    <input id="c_nama" placeholder="Nama Pelanggan"
+      class="w-full mb-3 p-3 border rounded-xl">
+
+    <input id="c_no_wa" placeholder="No WhatsApp"
+      class="w-full mb-3 p-3 border rounded-xl">
+
+    <textarea id="c_alamat" placeholder="Alamat"
+      class="w-full mb-3 p-3 border rounded-xl"></textarea>
+
+    <div class="flex justify-end gap-2">
+      <button onclick="closeCustomer()" class="px-4 py-2">Batal</button>
+      <button onclick="saveCustomer()" class="bg-teal-600 text-white px-4 py-2 rounded-xl">
+        Simpan
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+    <!-- ================= MODAL CUCIAN BARU ================= -->
+    
+    <div
+      id="modalCucian"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center"
+    >
+      <!-- BACKDROP -->
+      <div
+        onclick="closeCucian()"
+        class="absolute inset-0 bg-black/40 backdrop-blur-sm"
+      ></div>
+
+      <!-- BOX -->
+      <div class="relative bg-white w-full max-w-2xl rounded-2xl shadow-lg p-6">
+        <!-- HEADER -->
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Tambah Cucian Baru</h2>
+          <button onclick="closeCucian()" class="text-gray-400">✕</button>
+        </div>
+
+        <hr class="mb-4" />
+
+        <!-- INFORMASI PELANGGAN -->
+        <div class="flex justify-between items-center mb-2">
+          <p class="text-sm font-semibold text-teal-600">Informasi Pelanggan</p>
+
+          <button
+            onclick="openCustomer()"
+            class="text-xs font-semibold text-teal-600 hover:underline"
+          >
+            + Tambah Pelanggan Baru
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <!-- KIRI -->
+          <div class="relative">
+            <input
+              id="nama_cucian"
+              placeholder="Nama Pelanggan"
+              class="w-full p-3 border rounded-xl h-12"
+              oninput="searchCustomer(this.value)"
+              autocomplete="off"
+            />
+
+            <div
+              id="suggestBox"
+              class="absolute z-[9999] bg-white border rounded-xl w-full mt-1 hidden max-h-40 overflow-auto shadow-lg"
+            ></div>
+          </div>
+
+          <!-- KANAN -->
+          <div class="relative">
+            <input
+              id="hp_cucian"
+              placeholder="No. WhatsApp"
+              oninput="this.value = formatWA(this.value)"
+              class="w-full p-3 border rounded-xl h-12"
+            />
+          </div>
+        </div>
+
+        <!-- DETAIL -->
+        <p class="text-sm font-semibold text-teal-600 mb-2">Detail Cucian</p>
+
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <input
+            id="berat_cucian"
+            placeholder="Berat (Kg)"
+            class="p-3 border rounded-xl"
+          />
+          <input
+            id="harga_cucian"
+            placeholder="Harga"
+            class="p-3 border rounded-xl"
+          />
+        </div>
+
+        <!-- KETERANGAN -->
+        <textarea
+          id="ket_cucian"
+          placeholder="Keterangan (Optional)"
+          class="w-full p-3 border rounded-xl mb-4 h-28"
+        ></textarea>
+
+        <!-- ACTION -->
+        <div class="flex justify-end gap-2">
+          <button onclick="closeCucian()">Batal</button>
+          <button
+            onclick="saveCucian()"
+            class="bg-teal-600 text-white px-4 py-2 rounded-xl"
+          >
+            Simpan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= LOGIN ================= -->
+    <div id="loginView" class="flex h-screen">
+      <div
+        class="hidden md:flex w-1/2 bg-gradient-to-br from-cyan-700 to-teal-500 text-white p-10 flex-col justify-center"
+      >
+        <h1 class="text-4xl font-bold mb-4">Laundry Connect</h1>
+        <p class="text-lg opacity-90">
+          Manajemen laundry modern, pantau transaksi & status cucian pelanggan
+          secara realtime.
+        </p>
+      </div>
+
+      <div class="flex w-full md:w-1/2 items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow w-80">
+          <h2 class="text-2xl font-bold mb-6 text-center">Selamat Datang 👋</h2>
+
+          <input
+            id="email"
+            placeholder="Email"
+            class="w-full mb-3 p-3 border rounded-xl"
+          />
+
+          <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            class="w-full mb-4 p-3 border rounded-xl"
+          />
+
+          <button
+            onclick="doLogin()"
+            class="w-full bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-xl"
+          >
+            Masuk ke Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= APP ================= -->
+    <div id="appView" class="hidden flex">
+      <!-- SIDEBAR -->
+      <div
+        class="w-64 bg-white shadow-lg min-h-screen flex flex-col justify-between"
+      >
+        <div>
+          <!-- Logo -->
+          <div class="p-5 font-bold text-lg border-b text-teal-600">
+            Laundry Connect
+          </div>
+
+          <!-- Menu -->
+          <div class="p-4 space-y-2">
+            <div class="text-xs text-gray-400 uppercase mb-2">Menu Utama</div>
+          
+            <a href="index.html"
+              class="block w-full text-left p-2 rounded-lg bg-teal-100 text-teal-600">
+              Dashboard
+            </a>
+          
+            <a href="data-cucian.html"
+              class="block w-full text-left p-2 rounded-lg hover:bg-gray-100">
+              Data Cucian
+            </a>
+          
+            <button
+              class="block w-full text-left p-2 rounded-lg hover:bg-gray-100">
+              Keuangan
+            </button>
+          
+            <button
+              class="block w-full text-left p-2 rounded-lg hover:bg-gray-100">
+              Pengaturan
+            </button>
+          </div>
+        </div>
+
+        <!-- USER -->
+        <div class="p-4 border-t">
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="bg-teal-600 text-white rounded-full w-10 h-10 flex items-center justify-center"
+            >
+              AT
+            </div>
+            <div>
+              <div class="font-semibold">Admin Laundry</div>
+              <div class="text-xs text-gray-500">Administrator</div>
+            </div>
+          </div>
+
+          <button
+            onclick="logout()"
+            class="w-full border border-red-300 text-red-500 p-2 rounded-lg hover:bg-red-50"
+          >
+            Keluar
+          </button>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="flex-1 p-6 bg-gray-100">
+        <div id="pageDashboard">
+          <!-- HEADER -->
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Dashboard</h2>
+
+            <button
+              onclick="openCucian()"
+              class="bg-teal-600 text-white px-4 py-2 rounded-lg shadow"
+            >
+              + Cucian Baru
+            </button>
+          </div>
+
+          <!-- KARTU -->
+          <div class="grid grid-cols-4 gap-4 mb-6">
+            <!-- Cucian Masuk -->
+            <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
+              <div
+                class="absolute top-3 left-3 bg-blue-100 text-blue-600 p-4 rounded-lg text-sm"
+              >
+                ➕
+              </div>
+
+              <p id="masuk" class="text-3xl font-bold">0</p>
+              <p class="text-gray-500 text-sm">Cucian Masuk</p>
+            </div>
+
+            <!-- Sedang Dikerjakan -->
+            <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
+              <div
+                class="absolute top-3 left-3 bg-yellow-100 text-yellow-600 p-4 rounded-lg text-sm"
+              >
+                ⚙️
+              </div>
+              <div>
+                <p id="proses" class="text-3xl font-bold">0</p>
+                <p class="text-gray-500 text-sm">Sedang Dikerjakan</p>
+              </div>
+            </div>
+
+            <!-- Cucian Selesai -->
+            <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
+              <div
+                class="absolute top-3 left-3 bg-green-100 text-green-600 p-4 rounded-lg text-sm"
+              >
+                ✔️
+              </div>
+              <div>
+                <p id="selesai" class="text-3xl font-bold">0</p>
+                <p class="text-gray-500 text-sm">Cucian Selesai</p>
+              </div>
+            </div>
+
+            <!-- Pendapatan -->
+            <div class="relative bg-white p-4 pt-20 rounded-xl shadow">
+              <div
+                class="absolute top-3 left-3 bg-teal-100 text-teal-600 p-4 rounded-lg text-sm"
+              >
+                💰
+              </div>
+              <div>
+                <p id="income" class="text-3xl font-bold text-teal-600">Rp 0</p>
+                <p class="text-gray-500 text-sm">Pendapatan Hari Ini</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTTOM -->
+          <div class="grid grid-cols-3 gap-4">
+            <!-- GRAFIK -->
+            <div class="col-span-2 bg-white p-4 rounded-xl shadow">
+              <div class="font-semibold mb-2">Tren Pendapatan</div>
+              <div class="h-64 flex items-center justify-center text-gray-400">
+                Grafik akan tampil di sini
+              </div>
+            </div>
+
+            <!-- TERBARU -->
+            <div
+              class="bg-white p-4 rounded-xl shadow flex flex-col justify-between"
+            >
+              <div>
+                <div class="font-semibold mb-2">Cucian Selesai Terbaru</div>
+                <div id="list" class="text-sm text-gray-500"></div>
+              </div>
+
+              <button
+                class="mt-4 border border-teal-400 text-teal-500 p-2 rounded-lg hover:bg-teal-50"
+              >
+                Lihat Semua Laporan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRANSAKSI -->
+        <div id="pageTransaksi" class="hidden">
+          <h2 class="text-2xl font-bold mb-4">Tambah Cucian Baru</h2>
+
+          <div class="bg-white p-5 rounded-2xl shadow max-w-md">
+            <!-- DROPDOWN PELANGGAN -->
+            <select
+              id="customerSelect"
+              class="w-full mb-3 p-3 border rounded-xl"
+            ></select>
+
+            <input
+              id="nama"
+              placeholder="Nama"
+              class="w-full mb-3 p-3 border rounded-xl"
+            />
+
+            <input
+              id="no_wa"
+              placeholder="No WhatsApp"
+              class="w-full mb-3 p-3 border rounded-xl"
+            />
+
+            <input
+              id="berat"
+              placeholder="Berat (Kg)"
+              class="w-full mb-3 p-3 border rounded-xl"
+            />
+
+            <input
+              id="harga"
+              placeholder="Harga/kg"
+              class="w-full mb-3 p-3 border rounded-xl"
+            />
+
+            <button
+              onclick="add()"
+              class="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded-xl"
+            >
+              Simpan
+            </button>
+
+            <div id="out" class="mt-3 text-green-600 text-sm"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ================= MODAL CUCIAN =================
+
+      // SIMPAN (sementara pakai fungsi lama)
+      async function saveCucian() {
+        const r = await gas("addTransaction", {
+          nama: nama_cucian.value,
+          no_wa: hp_cucian.value,
+          berat: berat_cucian.value,
+          harga: harga_cucian.value,
+        });
+
+        alert("Cucian berhasil ditambahkan");
+
+        closeCucian();
+        loadDashboard();
+      }
+
+      const URL =
+        "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
+
+      let customers = [];
+
+      // ================= API =================
+      async function gas(f, d = {}) {
+        const r = await fetch(URL, {
+          method: "POST",
+          body: JSON.stringify({ func: f, ...d }),
+        });
+        return await r.json();
+      }
+
+      // ================= LOGIN =================
+      async function doLogin() {
+        const r = await gas("login", {
+          email: email.value,
+          password: password.value,
+        });
+
+        if (r.success) {
+          localStorage.setItem("u", JSON.stringify(r.data));
+          showApp();
+        } else {
+          alert("Email / Password salah");
+        }
+      }
+
+      // ================= SHOW APP =================
+      function showApp() {
+        loginView.classList.add("hidden");
+        appView.classList.remove("hidden");
+        loadDashboard();
+        loadCustomers();
+      }
+
+      // ================= NAVIGATION =================
+      function showPage(p) {
+        pageDashboard.classList.add("hidden");
+        pageTransaksi.classList.add("hidden");
+
+        if (p === "dashboard") pageDashboard.classList.remove("hidden");
+        if (p === "transaksi") pageTransaksi.classList.remove("hidden");
+      }
+
+      // ================= CUSTOMER =================
+
+      function formatWA(input) {
+        let wa = input.trim();
+
+        // hapus spasi & karakter aneh
+        wa = wa.replace(/[^0-9+]/g, "");
+
+        // jika diawali 08 → ubah ke +628
+        if (wa.startsWith("08")) {
+          wa = "+62" + wa.substring(1);
+        }
+
+        // jika diawali 8 → anggap 08
+        else if (wa.startsWith("8")) {
+          wa = "+62" + wa;
+        }
+
+        // jika diawali 62 → tambah +
+        else if (wa.startsWith("62")) {
+          wa = "+" + wa;
+        }
+
+        // jika sudah +62 → biarkan
+
+        return wa;
+      }
+
+      function searchCustomer(keyword) {
+        const box = document.getElementById("suggestBox");
+
+        if (!keyword) {
+          box.classList.add("hidden");
+          box.innerHTML = "";
+          return;
+        }
+
+        const filtered = customers.filter((c) =>
+          c.nama.toLowerCase().includes(keyword.toLowerCase())
+        );
+
+        if (filtered.length === 0) {
+          box.innerHTML = `<div class="p-2 text-gray-400">Tidak ditemukan</div>`;
+          box.classList.remove("hidden");
+          return;
+        }
+
+        let html = "";
+
+        filtered.forEach((c) => {
+          html += `
+      <div 
+        class="p-2 hover:bg-gray-100 cursor-pointer"
+        onclick="selectCustomer('${c.id}')"
+      >
+        <div class="font-semibold">${c.nama}</div>
+        <div class="text-xs text-gray-500">${c.no_wa}</div>
+      </div>
+    `;
+        });
+
+        box.innerHTML = html;
+        box.classList.remove("hidden");
+      }
+
+      function selectCustomer(id) {
+        const c = customers.find((x) => x.id == id);
+
+        if (!c) return;
+
+        nama_cucian.value = c.nama;
+        hp_cucian.value = c.no_wa;
+
+        document.getElementById("suggestBox").classList.add("hidden");
+      }
+
+      document.addEventListener("click", function (e) {
+        const box = document.getElementById("suggestBox");
+        const input = document.getElementById("nama_cucian");
+
+        if (!box.contains(e.target) && e.target !== input) {
+          box.classList.add("hidden");
+        }
+      });
+
+      function openCustomer() {
+        closeCucian(); // tutup modal cucian dulu
+        document.getElementById("modalCustomer").classList.remove("hidden");
+      }
+
+      function closeCustomer() {
+        modalCustomer.classList.add("hidden");
+      }
+
+async function saveCustomer() {
+
+  try {
+
+    const c_nama =
+      document.getElementById("c_nama");
+
+    const c_no_wa =
+      document.getElementById("c_no_wa");
+
+    const c_alamat =
+      document.getElementById("c_alamat");
+
+    // VALIDASI NAMA
+    if (!c_nama.value.trim()) {
+
+      alert("Nama pelanggan wajib diisi");
+
+      c_nama.focus();
+
+      return;
+    }
+
+    // FORMAT WA
+    let wa = c_no_wa.value.trim();
+
+    // hapus selain angka
+    wa = wa.replace(/\D/g, "");
+
+    // 08 -> 628
+    if (wa.startsWith("08")) {
+
+      wa = "62" + wa.substring(1);
+
+    }
+
+    // 8 -> 628
+    else if (wa.startsWith("8")) {
+
+      wa = "62" + wa;
+
+    }
+
+    // jika sudah 62
+    else if (wa.startsWith("62")) {
+
+      wa = wa;
+
+    }
+
+    else {
+
+      alert("Nomor WhatsApp tidak valid");
+
+      c_no_wa.focus();
+
+      return;
+    }
+
+    wa = "+" + wa;
+
+    // tampilkan otomatis
+    c_no_wa.value = wa;
+
+    // ================= KIRIM =================
+    const r = await gas(
+      "addCustomer",
+      {
+        nama: c_nama.value,
+        no_wa: wa,
+        alamat: c_alamat.value
+      }
+    );
+
+    console.log(r);
+
+    // ERROR
+    if (!r || !r.success) {
+
+      alert(
+        r?.error || "Gagal menyimpan pelanggan"
+      );
+
+      return;
+    }
+
+    // SUCCESS
+    alert("Pelanggan berhasil disimpan");
+
+    // AUTO FILL
+    document.getElementById("nama_cucian").value =
+      c_nama.value;
+
+    document.getElementById("hp_cucian").value =
+      wa;
+
+    // RESET
+    c_nama.value = "";
+    c_no_wa.value = "";
+    c_alamat.value = "";
+
+    // reload customer
+    await loadCustomers();
+
+    // tutup modal
+    closeCustomer();
+
+    // buka lagi modal cucian
+    openCucian();
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      "Terjadi kesalahan : " + err
+    );
+  }
+}
+
+      function resetCucianForm() {
+        nama_cucian.value = "";
+        hp_cucian.value = "";
+        berat_cucian.value = "";
+        harga_cucian.value = "";
+        ket_cucian.value = "";
+
+        // kalau pakai autocomplete
+        const box = document.getElementById("suggestBox");
+        if (box) {
+          box.classList.add("hidden");
+          box.innerHTML = "";
+        }
+      }
+
+      async function loadCustomers() {
+        const r = await gas("getCustomers");
+
+        customers = r.data;
+
+        let html = "<option value=''>Pilih Pelanggan</option>";
+
+        customers.forEach((c) => {
+          html += `<option value="${c.id}">${c.nama} (${c.no_wa})</option>`;
+        });
+
+        customerSelect.innerHTML = html;
+      }
+
+      // AUTO FILL
+      customerSelect.onchange = () => {
+        const c = customers.find((x) => x.id == customerSelect.value);
+        if (c) {
+          nama.value = c.nama;
+          hp.value = c.no_wa;
+        }
+      };
+
+      // ================= TRANSAKSI =================
+      async function add() {
+        const r = await gas("addTransaction", {
+          customer_id: customerSelect.value,
+          nama: nama.value,
+          no_wa: hp.value,
+          berat: berat.value,
+          harga: harga.value,
+        });
+
+        out.innerHTML = "Kode: " + r.kode;
+        loadDashboard();
+      }
+
+      // ================= DASHBOARD =================
+      async function loadDashboard() {
+        const r = await gas("getDashboard");
+
+        income.innerText = "Rp " + r.data.summary.income;
+
+        let masuk = 0;
+        let proses = 0;
+        let selesai = 0;
+
+        let html = "";
+
+        r.data.latest.forEach((t) => {
+          if (t.status === "Masuk") masuk++;
+          if (t.status === "Proses") proses++;
+          if (t.status === "Selesai") selesai++;
+
+          let color = "text-gray-500";
+          if (t.status === "Masuk") color = "text-yellow-500";
+          if (t.status === "Proses") color = "text-blue-500";
+          if (t.status === "Selesai") color = "text-green-600";
+
+          if (t.status === "Selesai") {
+            html += `
+        <div class="flex justify-between border-b py-2">
+          <div>
+            <p class="font-bold">${t.kode}</p>
+            <p class="text-xs text-gray-500">${t.nama}</p>
+          </div>
+          <div class="text-right">
+            <p class="${color} font-semibold">${t.status}</p>
+            <p class="font-bold">Rp ${t.total}</p>
+          </div>
+        </div>
+      `;
+          }
+        });
+
+        document.getElementById("masuk").innerText = masuk;
+        document.getElementById("proses").innerText = proses;
+        document.getElementById("selesai").innerText = selesai;
+
+        list.innerHTML = html || "Belum ada data selesai";
+      }
+
+      // ================= LOGOUT =================
+      function logout() {
+        localStorage.clear();
+        location.reload();
+      }
+
+      // ================= AUTO LOGIN =================
+      window.onload = () => {
+        if (localStorage.getItem("u")) {
+          showApp();
+        }
+      };
+
+      // ================= MODAL CUCIAN =================
+      function openCucian() {
+        resetCucianForm(); // ⬅️ ini yang penting
+        document.getElementById("modalCucian").classList.remove("hidden");
+
+        // bonus biar langsung bisa ketik
+        nama_cucian.focus();
+      }
+
+      function closeCucian() {
+        document.getElementById("modalCucian").classList.add("hidden");
+        resetCucianForm();
+      }
+    </script>
+  </body>
+</html>
