@@ -92,6 +92,16 @@ function renderDataCucian() {
   initFormCucian();
 }
 
+function renderFormCucian() {
+  console.log("FORM BARU DIPAKAI");
+
+  return `
+    <div style="border:2px solid red; padding:10px;">
+      FORM BARU AKTIF
+    </div>
+  `;
+}
+
 function initFormCucian() {
   const form = document.getElementById("formCucian");
 
