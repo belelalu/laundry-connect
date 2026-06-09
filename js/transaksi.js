@@ -27,11 +27,11 @@ window.loadTransactions = async function loadTransactions() {
 }
 
 // tombol + cucian baru (modal sudah di index.html)
-function openCucian() {
+window.openCucian = function openCucian() {
   document.getElementById("modalCucian").classList.remove("hidden");
 }
 
-function closeCucian() {
+window.closeCucian = function closeCucian() {
   document.getElementById("modalCucian").classList.add("hidden");
 }
 
