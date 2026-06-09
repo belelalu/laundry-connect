@@ -3,9 +3,6 @@ window.loadDashboard = async function () {
 
   if (!r || !r.data) return;
 
-  document.getElementById("income").innerText =
-    "Rp " + r.data.summary.income;
-
   let masuk = 0;
   let proses = 0;
   let selesai = 0;
@@ -33,10 +30,31 @@ window.loadDashboard = async function () {
     }
   });
 
-  document.getElementById("masuk").innerText = masuk;
-  document.getElementById("proses").innerText = proses;
-  document.getElementById("selesai").innerText = selesai;
+  const el = document.getElementById("dashboardContent");
 
-  document.getElementById("list").innerHTML =
-    html || "Belum ada data selesai";
+  if (!el) return;
+
+  el.innerHTML = `
+    <div class="grid grid-cols-3 gap-4 mb-4">
+      <div class="bg-white p-4 rounded-xl shadow">
+        <p class="text-gray-500">Masuk</p>
+        <p class="text-2xl font-bold">${masuk}</p>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow">
+        <p class="text-gray-500">Proses</p>
+        <p class="text-2xl font-bold">${proses}</p>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow">
+        <p class="text-gray-500">Selesai</p>
+        <p class="text-2xl font-bold">${selesai}</p>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow">
+      <h3 class="font-bold mb-2">Cucian Selesai Terbaru</h3>
+      ${html || "<p class='text-gray-500'>Belum ada data</p>"}
+    </div>
+  `;
 };
