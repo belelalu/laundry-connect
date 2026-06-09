@@ -33,3 +33,8 @@ async function loadTransactions() {
     console.error("LOAD TRANSAKSI ERROR:", err);
   }
 }
+
+return {
+  success: true,
+  data: list || []
+};
