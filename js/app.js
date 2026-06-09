@@ -25,26 +25,30 @@ function closeCustomer() {
 }
 
 function renderFormCucian() {
-  console.log("🔥 FORM BARU DIPAKAI");
-
-  return `
-    <div style="border:2px solid red; padding:10px; margin:10px;">
-      FORM BARU AKTIF
-    </div>
-
-    <form id="formCucian">
-      <input id="nama" placeholder="Nama">
-      <select id="jenis">
-        <option>Reguler</option>
-        <option>Express</option>
-      </select>
-      <input id="berat" type="number">
-      <textarea id="catatan"></textarea>
-
-      <button type="submit">Simpan</button>
-    </form>
-  `;
+  return `<h1 style="color:red">FORM BARU SUDAH DIPAKAI</h1>`;
 }
+
+// function renderFormCucian() {
+//   console.log("🔥 FORM BARU DIPAKAI");
+
+//   return `
+//     <div style="border:2px solid red; padding:10px; margin:10px;">
+//       FORM BARU AKTIF
+//     </div>
+
+//     <form id="formCucian">
+//       <input id="nama" placeholder="Nama">
+//       <select id="jenis">
+//         <option>Reguler</option>
+//         <option>Express</option>
+//       </select>
+//       <input id="berat" type="number">
+//       <textarea id="catatan"></textarea>
+
+//       <button type="submit">Simpan</button>
+//     </form>
+//   `;
+// }
 
 function renderDashboard() {
   document.getElementById("app").innerHTML = `
