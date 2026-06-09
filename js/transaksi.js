@@ -1,51 +1,35 @@
-window.loadTransactions = async function loadTransactions() {
+async function loadTransactions() {
   const tbody = document.getElementById("tbodyTransaksi");
   if (!tbody) return;
 
-  const r = await gas("getAllTransactions");
+  try {
+    const r = await gas("getAllTransactions");
 
-  if (!r || !r.success) return;
+    console.log("DEBUG TRANSAKSI:", r);
 
-  tbody.innerHTML = "";
+    if (!r || !r.success || !Array.isArray(r.data)) {
+      tbody.innerHTML = "<tr><td colspan='4'>Data kosong</td></tr>";
+      return;
+    }
 
-  r.data.reverse().forEach((item) => {
-    tbody.innerHTML += `
-      <tr class="border-t">
-        <td class="p-3 font-semibold">${item.kode}</td>
-        <td class="p-3">${item.nama}</td>
-        <td class="p-3">
-          <span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-xs">
-            ${item.status}
-          </span>
-        </td>
-        <td class="p-3">
-          Rp ${Number(item.total || 0).toLocaleString("id-ID")}
-        </td>
-      </tr>
-    `;
-  });
-}
+    tbody.innerHTML = "";
 
-// tombol + cucian baru (modal sudah di index.html)
-window.openCucian = function openCucian() {
-  document.getElementById("modalCucian").classList.remove("hidden");
-}
+    r.data
+      .slice() // copy array biar aman
+      .reverse()
+      .forEach(item => {
 
-window.closeCucian = function closeCucian() {
-  document.getElementById("modalCucian").classList.add("hidden");
-}
+        tbody.innerHTML += `
+          <tr>
+            <td>${item.kode}</td>
+            <td>${item.nama}</td>
+            <td>${item.status}</td>
+            <td>Rp ${Number(item.total).toLocaleString("id-ID")}</td>
+          </tr>
+        `;
+      });
 
-// simpan cucian dari modal dashboard
-async function saveCucian() {
-  const r = await gas("addTransaction", {
-    nama: nama_cucian.value,
-    no_wa: hp_cucian.value,
-    berat: berat_cucian.value,
-    harga: harga_cucian.value
-  });
-
-  alert("Cucian berhasil ditambahkan");
-
-  closeCucian();
-  loadDashboard();
+  } catch (err) {
+    console.error("LOAD TRANSAKSI ERROR:", err);
+  }
 }
