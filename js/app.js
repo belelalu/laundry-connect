@@ -25,49 +25,38 @@ function closeCustomer() {
 }
 
 function renderFormCucian() {
-  return `<h1 style="color:red">FORM BARU SUDAH DIPAKAI</h1>`;
+  return 
+    <form id="formCucian">
+      <input id="nama" placeholder="Nama">
+      <select id="jenis">
+        <option>Reguler</option>
+        <option>Express</option>
+      </select>
+      <input id="berat" type="number">
+      <textarea id="catatan"></textarea>
+
+      <button type="submit">Simpan</button>
+    </form>
+  ;
 }
 
-// function renderFormCucian() {
-//   console.log("🔥 FORM BARU DIPAKAI");
-
-//   return `
-//     <div style="border:2px solid red; padding:10px; margin:10px;">
-//       FORM BARU AKTIF
-//     </div>
-
-//     <form id="formCucian">
-//       <input id="nama" placeholder="Nama">
-//       <select id="jenis">
-//         <option>Reguler</option>
-//         <option>Express</option>
-//       </select>
-//       <input id="berat" type="number">
-//       <textarea id="catatan"></textarea>
-
-//       <button type="submit">Simpan</button>
-//     </form>
-//   `;
-// }
-
 function renderDashboard() {
-  document.getElementById("app").innerHTML = `
+  document.getElementById("app").innerHTML = 
     <h3>Dashboard</h3>
     ${renderFormCucian()}
-  `;
+  ;
 
   initFormCucian();
 }
 
 function renderDataCucian() {
-  document.getElementById("pageTransaksi").classList.remove("hidden");
-  document.getElementById("pageDashboard").classList.add("hidden");
+  document.getElementById("app").innerHTML = 
+    <h3>Data Cucian</h3>
 
-  document.getElementById("transaksiContainer").innerHTML =
-    renderFormCucian();
+    ${renderFormCucian()}
 
-  initFormCucian();
-}
+    <hr>
+  ;
 
   initFormCucian();
 }
@@ -77,8 +66,7 @@ function initFormCucian() {
 
   if (!form) return;
 
-  // HAPUS listener lama dulu (anti double trigger)
-  form.onsubmit = function (e) {
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     const data = {
@@ -91,9 +79,9 @@ function initFormCucian() {
     console.log("DATA CUCIAN:", data);
 
     alert("Cucian berhasil disimpan!");
-
+    
     form.reset();
-  };
+  });
 }
 
 // URL APPS SCRIPT
@@ -144,7 +132,7 @@ async function loadTransactions() {
       .reverse()
       .forEach(item => {
 
-        tbody.innerHTML += `
+        tbody.innerHTML += 
           <tr class="border-t">
 
             <td class="p-3 font-semibold">
@@ -180,7 +168,7 @@ async function loadTransactions() {
             </td>
 
           </tr>
-        `;
+        ;
 
       });
 
