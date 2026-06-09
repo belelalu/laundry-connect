@@ -1,17 +1,38 @@
 <!DOCTYPE html>
-<html>
-<script src="js/api.js" defer></script>
-<script src="js/dashboard.js" defer></script>
-<script src="js/transaksi.js" defer></script>
-<script src="js/customer.js" defer></script>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("u")) {
-      loadDashboard();
-      loadCustomers();
-      loadTransactions();
-    }
-  });
-</script>
+  <title>Laundry Connect</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- JS Modules -->
+  <script src="js/api.js" defer></script>
+  <script src="js/dashboard.js" defer></script>
+  <script src="js/transaksi.js" defer></script>
+  <script src="js/customer.js" defer></script>
+</head>
+
+<body>
+
+  <!-- ===== APP CONTENT (WAJIB ADA) ===== -->
+  <div id="app">
+    <!-- dashboard / UI kamu di sini -->
+  </div>
+
+  <!-- ===== INIT ===== -->
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("u")) {
+        loadDashboard();
+        loadCustomers();
+        loadTransactions();
+      }
+    });
+  </script>
+
+</body>
 </html>
