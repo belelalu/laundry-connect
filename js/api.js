@@ -1,5 +1,8 @@
-async function gas(func, data = {}) {
-  const res = await fetch(API_URL, {
+window.API_URL =
+  "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
+
+window.gas = async function (func, data = {}) {
+  const res = await fetch(window.API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -11,4 +14,4 @@ async function gas(func, data = {}) {
   });
 
   return await res.json();
-}
+};
