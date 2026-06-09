@@ -66,7 +66,8 @@ function initFormCucian() {
 
   if (!form) return;
 
-  form.addEventListener("submit", function (e) {
+  // HAPUS listener lama dulu (anti double trigger)
+  form.onsubmit = function (e) {
     e.preventDefault();
 
     const data = {
@@ -79,9 +80,9 @@ function initFormCucian() {
     console.log("DATA CUCIAN:", data);
 
     alert("Cucian berhasil disimpan!");
-    
+
     form.reset();
-  });
+  };
 }
 
 // URL APPS SCRIPT
