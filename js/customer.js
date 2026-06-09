@@ -1,6 +1,6 @@
 let customers = [];
 
-window.gas = async function loadCustomers() {
+window.loadCustomers = async function loadCustomers() {
   const r = await gas("getCustomers");
 
   customers = r.data || [];
@@ -16,7 +16,7 @@ window.gas = async function loadCustomers() {
   }
 }
 
-function searchCustomer(keyword) {
+window.searchCustomer = function searchCustomer(keyword) {
   const box = document.getElementById("suggestBox");
   if (!keyword) return box.classList.add("hidden");
 
@@ -41,7 +41,7 @@ function searchCustomer(keyword) {
   box.classList.remove("hidden");
 }
 
-function selectCustomer(id) {
+window.selectCustomer = function selectCustomer(id) {
   const c = customers.find(x => x.id == id);
   if (!c) return;
 
