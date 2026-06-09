@@ -1,4 +1,4 @@
-async function loadTransactions() {
+window.loadTransactions = async function () {
   const tbody = document.getElementById("tbodyTransaksi");
   if (!tbody) return;
 
@@ -15,10 +15,9 @@ async function loadTransactions() {
     tbody.innerHTML = "";
 
     r.data
-      .slice() // copy array biar aman
+      .slice()
       .reverse()
       .forEach(item => {
-
         tbody.innerHTML += `
           <tr>
             <td>${item.kode}</td>
@@ -32,5 +31,4 @@ async function loadTransactions() {
   } catch (err) {
     console.error("LOAD TRANSAKSI ERROR:", err);
   }
-}
-
+};
