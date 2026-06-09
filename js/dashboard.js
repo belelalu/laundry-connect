@@ -1,20 +1,10 @@
 window.loadDashboard = async function () {
-  const incomeEl = document.getElementById("income");
-  const masukEl = document.getElementById("masuk");
-  const prosesEl = document.getElementById("proses");
-  const selesaiEl = document.getElementById("selesai");
-  const listEl = document.getElementById("list");
-
-  // 🔥 STOP kalau bukan halaman dashboard
-  if (!incomeEl || !masukEl || !prosesEl || !selesaiEl || !listEl) {
-    return;
-  }
-
   const r = await gas("getDashboard");
 
   if (!r || !r.data) return;
 
-  incomeEl.innerText = "Rp " + r.data.summary.income;
+  document.getElementById("income").innerText =
+    "Rp " + r.data.summary.income;
 
   let masuk = 0;
   let proses = 0;
@@ -43,9 +33,10 @@ window.loadDashboard = async function () {
     }
   });
 
-  masukEl.innerText = masuk;
-  prosesEl.innerText = proses;
-  selesaiEl.innerText = selesai;
+  document.getElementById("masuk").innerText = masuk;
+  document.getElementById("proses").innerText = proses;
+  document.getElementById("selesai").innerText = selesai;
 
-  listEl.innerHTML = html || "Belum ada data selesai";
+  document.getElementById("list").innerHTML =
+    html || "Belum ada data selesai";
 };
