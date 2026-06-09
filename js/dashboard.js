@@ -1,4 +1,4 @@
-async function loadDashboard() {
+window.gas = async function loadDashboard() {
   const r = await gas("getDashboard");
 
   if (!r || !r.data) return;
