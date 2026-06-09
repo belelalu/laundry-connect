@@ -1,4 +1,4 @@
-window.gas = async function loadDashboard() {
+window.loadDashboard = async function () {
   const r = await gas("getDashboard");
 
   if (!r || !r.data) return;
@@ -39,4 +39,4 @@ window.gas = async function loadDashboard() {
 
   document.getElementById("list").innerHTML =
     html || "Belum ada data selesai";
-}
+};
