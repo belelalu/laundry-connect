@@ -60,13 +60,14 @@ function renderDashboard() {
 }
 
 function renderDataCucian() {
-  document.getElementById("app").innerHTML = `
-    <h3>Data Cucian</h3>
+  document.getElementById("pageTransaksi").classList.remove("hidden");
+  document.getElementById("pageDashboard").classList.add("hidden");
 
-    ${renderFormCucian()}
+  document.getElementById("transaksiContainer").innerHTML =
+    renderFormCucian();
 
-    <hr>
-  `;
+  initFormCucian();
+}
 
   initFormCucian();
 }
