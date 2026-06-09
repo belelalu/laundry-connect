@@ -30,22 +30,174 @@
 <body class="bg-gray-100">
 
 <!-- ================= LOGIN ================= -->
-<div id="loginView" class="flex h-screen">
-  <div class="hidden md:flex w-1/2 bg-gradient-to-br from-cyan-700 to-teal-500 text-white p-10 flex-col justify-center">
-    <h1 class="text-4xl font-bold mb-4">Laundry Connect</h1>
-    <p>Manajemen laundry modern</p>
-  </div>
+<div id="loginView" class="flex min-h-screen bg-white">
 
-  <div class="flex w-full md:w-1/2 items-center justify-center">
-    <div class="bg-white p-8 rounded-2xl shadow w-80">
-      <input id="email" class="w-full mb-3 p-3 border rounded-xl" placeholder="Email">
-      <input id="password" type="password" class="w-full mb-3 p-3 border rounded-xl" placeholder="Password">
+  <!-- LEFT SIDE -->
+  <div
+    class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
 
-      <button onclick="doLogin()" class="w-full bg-teal-600 text-white p-3 rounded-xl">
-        Login
-      </button>
+    <!-- Background -->
+    <div
+      class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1600')] bg-cover bg-center">
     </div>
+
+    <!-- Overlay -->
+    <div
+      class="absolute inset-0 bg-gradient-to-br from-cyan-900/90 via-cyan-700/80 to-teal-500/80">
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 p-16 flex flex-col justify-center text-white">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-4 mb-10">
+
+        <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-2xl">
+          🧺
+        </div>
+
+        <h1 class="text-4xl font-bold">
+          Laundry Connect
+        </h1>
+
+      </div>
+
+      <!-- Heading -->
+      <h2 class="text-6xl font-extrabold leading-tight mb-8">
+
+        Manajemen Laundry,<br>
+
+        <span class="text-cyan-200">
+          Kini Lebih Pintar.
+        </span>
+
+      </h2>
+
+      <!-- Description -->
+      <p class="text-xl text-cyan-50 max-w-xl leading-relaxed mb-12">
+
+        Pantau progres pencucian, kelola pelanggan,
+        catat pendapatan, dan berikan pengalaman
+        tracking transparan untuk pelanggan Anda.
+
+      </p>
+
+      <!-- Feature Cards -->
+      <div class="grid grid-cols-2 gap-6 max-w-3xl">
+
+        <div
+          class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6">
+
+          <div class="text-3xl mb-4">
+            📋
+          </div>
+
+          <h3 class="font-bold text-xl mb-2">
+            Manajemen Terpadu
+          </h3>
+
+          <p class="text-cyan-100">
+            Kelola pelanggan, cucian,
+            transaksi dan laporan.
+          </p>
+
+        </div>
+
+        <div
+          class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6">
+
+          <div class="text-3xl mb-4">
+            📱
+          </div>
+
+          <h3 class="font-bold text-xl mb-2">
+            QR Tracking
+          </h3>
+
+          <p class="text-cyan-100">
+            Pelanggan dapat memantau
+            status cucian secara realtime.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
+  <!-- RIGHT SIDE -->
+  <div
+    class="w-full lg:w-1/2 flex items-center justify-center p-8">
+
+    <div class="w-full max-w-md">
+
+      <h2 class="text-5xl font-bold text-slate-900 mb-3">
+        Selamat Datang 👋
+      </h2>
+
+      <p class="text-gray-500 mb-10 text-lg">
+        Masuk ke dashboard admin untuk mengelola Laundry Anda.
+      </p>
+
+      <!-- Login Form -->
+      <div class="space-y-5">
+
+        <div>
+          <label class="block mb-2 font-medium">
+            Email
+          </label>
+
+          <input
+            id="email"
+            class="w-full p-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="admin@laundryconnect.com">
+        </div>
+
+        <div>
+          <label class="block mb-2 font-medium">
+            Password
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            class="w-full p-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="••••••••">
+        </div>
+
+        <button
+          onclick="doLogin()"
+          class="w-full py-4 rounded-2xl text-white text-lg font-semibold bg-gradient-to-r from-cyan-700 to-teal-600 hover:shadow-lg transition">
+
+          Masuk ke Dashboard
+
+        </button>
+
+      </div>
+
+      <!-- Public Tracking -->
+      <div
+        class="mt-10 border rounded-2xl p-6 text-center bg-gray-50">
+
+        <p class="text-gray-500 mb-2">
+          Pelanggan ingin cek status cucian?
+        </p>
+
+        <button
+          class="font-semibold text-cyan-700 hover:text-cyan-900">
+
+          🔍 Lacak Cucian Saya
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 
 <!-- ================= APP ================= -->
