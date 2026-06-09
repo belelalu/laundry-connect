@@ -1,6 +1,6 @@
 let customers = [];
 
-async function loadCustomers() {
+window.gas = async function loadCustomers() {
   const r = await gas("getCustomers");
 
   customers = r.data || [];
