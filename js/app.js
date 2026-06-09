@@ -24,6 +24,50 @@ function closeCustomer() {
     .classList.add("hidden");
 }
 
+function renderFormCucian() {
+  return `
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Tambah Cucian Baru</h5>
+      </div>
+
+      <div class="card-body">
+        <form id="formCucian">
+          
+          <div class="mb-3">
+            <label class="form-label">Nama Pelanggan</label>
+            <input type="text" class="form-control" id="nama" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Jenis Cucian</label>
+            <select class="form-select" id="jenis">
+              <option>Reguler</option>
+              <option>Express</option>
+              <option>VIP</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Berat (Kg)</label>
+            <input type="number" class="form-control" id="berat" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Catatan</label>
+            <textarea class="form-control" id="catatan"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100">
+            Simpan Cucian
+          </button>
+
+        </form>
+      </div>
+    </div>
+  `;
+}
+
 // URL APPS SCRIPT
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxZVQxpqUvh-T7yBjhwH1XATE50c67hOaU9StNZBvMvUfd4kK-MAVSbNa1CY65PS8Q/exec";
