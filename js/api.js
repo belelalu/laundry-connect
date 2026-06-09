@@ -12,3 +12,24 @@ async function gas(f, d = {}) {
 
   return await res.json();
 }
+
+window.showApp = function () {
+  const loginView = document.getElementById("loginView");
+  const appView = document.getElementById("appView");
+
+  if (!loginView || !appView) return;
+
+  loginView.classList.add("hidden");
+  appView.classList.remove("hidden");
+
+  if (typeof loadDashboard === "function") {
+    loadDashboard();
+  }
+
+  if (typeof loadCustomers === "function") {
+    loadCustomers();
+  }
+};
+  loadDashboard();
+  loadCustomers();
+};
