@@ -76,7 +76,7 @@ window.loadDashboard = async function () {
 
   // CHART
 
-  renderIncomeChart();
+  // renderIncomeChart();
 
 };
 
