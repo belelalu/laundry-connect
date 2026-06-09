@@ -75,8 +75,6 @@ function renderDashboard() {
     ${renderFormCucian()}
 
     <hr>
-
-    <div id="dataCucianList"></div>
   `;
 
   initFormCucian();
@@ -89,8 +87,6 @@ function renderDataCucian() {
     ${renderFormCucian()}
 
     <hr>
-
-    <div id="tableCucian"></div>
   `;
 
   initFormCucian();
