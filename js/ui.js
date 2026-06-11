@@ -171,10 +171,14 @@ if (mobile) {
     if (force) {
       sidebar.classList.remove("-translate-x-full");
       document.querySelector("main").style.width = "100%";
+      document.getElementById("mainContent").style.flexBasis = "100%";
+      document.getElementById("mainContent").style.maxWidth = "100%";
       if (overlay) overlay.classList.remove("hidden");
     } else {
       sidebar.classList.add("-translate-x-full");
       document.querySelector("main").style.width = "100%";
+      document.getElementById("mainContent").style.flexBasis = "100%";
+      document.getElementById("mainContent").style.maxWidth = "100%";
       if (overlay) overlay.classList.add("hidden");
     }
 
@@ -184,10 +188,14 @@ if (mobile) {
   if (isHidden) {
     sidebar.classList.remove("-translate-x-full");
     document.querySelector("main").style.width = "100%";
+    document.getElementById("mainContent").style.flexBasis = "100%";
+    document.getElementById("mainContent").style.maxWidth = "100%";
     if (overlay) overlay.classList.remove("hidden");
   } else {
     sidebar.classList.add("-translate-x-full");
     document.querySelector("main").style.width = "100%";
+    document.getElementById("mainContent").style.flexBasis = "100%";
+    document.getElementById("mainContent").style.maxWidth = "100%";
     if (overlay) overlay.classList.add("hidden");
   }
 
