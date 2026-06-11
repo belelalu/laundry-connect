@@ -158,36 +158,40 @@ window.toggleSidebar = function(force) {
 
   const mobile = window.innerWidth < 1024;
 
-  // =========================
-  // MODE SMARTPHONE
-  // =========================
-  if (mobile) {
+// =========================
+// MODE SMARTPHONE
+// =========================
+if (mobile) {
 
-    const isHidden =
-      sidebar.classList.contains("-translate-x-full");
+  const isHidden =
+    sidebar.classList.contains("-translate-x-full");
 
-    if (typeof force === "boolean") {
+  if (typeof force === "boolean") {
 
-      if (force) {
-        sidebar.classList.remove("-translate-x-full");
-        if (overlay) overlay.classList.remove("hidden");
-      } else {
-        sidebar.classList.add("-translate-x-full");
-        if (overlay) overlay.classList.add("hidden");
-      }
-
-      return;
-    }
-
-    if (isHidden) {
+    if (force) {
       sidebar.classList.remove("-translate-x-full");
+      document.querySelector("main").style.width = "100%";
       if (overlay) overlay.classList.remove("hidden");
     } else {
       sidebar.classList.add("-translate-x-full");
+      document.querySelector("main").style.width = "100%";
       if (overlay) overlay.classList.add("hidden");
     }
 
+    return;
   }
+
+  if (isHidden) {
+    sidebar.classList.remove("-translate-x-full");
+    document.querySelector("main").style.width = "100%";
+    if (overlay) overlay.classList.remove("hidden");
+  } else {
+    sidebar.classList.add("-translate-x-full");
+    document.querySelector("main").style.width = "100%";
+    if (overlay) overlay.classList.add("hidden");
+  }
+
+}
 
   // =========================
   // MODE DESKTOP
