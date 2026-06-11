@@ -162,35 +162,25 @@ window.toggleSidebar = function(force) {
 // MODE SMARTPHONE
 // =========================
 if (mobile) {
-
   const isHidden =
     sidebar.classList.contains("-translate-x-full");
-
+  
   if (typeof force === "boolean") {
-
     if (force) {
       sidebar.classList.remove("-translate-x-full");
-      document.querySelector("main").style.width = "100%";
       if (overlay) overlay.classList.remove("hidden");
     } else {
       sidebar.classList.add("-translate-x-full");
-      document.querySelector("main").style.width = "100%";
       if (overlay) overlay.classList.add("hidden");
     }
-
     return;
-  }
-
-  if (isHidden) {
+  } if (isHidden) {
     sidebar.classList.remove("-translate-x-full");
-    document.querySelector("main").style.width = "100%";
     if (overlay) overlay.classList.remove("hidden");
   } else {
     sidebar.classList.add("-translate-x-full");
-    document.querySelector("main").style.width = "100%";
     if (overlay) overlay.classList.add("hidden");
   }
-
 }
 
   // =========================
