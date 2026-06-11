@@ -202,6 +202,14 @@
   id="appView"
   class="hidden flex relative min-h-screen bg-gray-100 overflow-x-hidden">
 
+  <!-- Overlay mobile -->
+  <div
+    id="sidebarOverlay"
+    onclick="toggleSidebar(false)"
+    class="hidden fixed inset-0 bg-black bg-opacity-40 z-30 lg:hidden">
+    
+    </div>
+
   <!-- SIDEBAR -->
   <aside
     id="sidebar"
@@ -290,20 +298,27 @@
 
   <!-- CONTENT -->
   <main class="flex-1 p-8">
+    <div class="flex items-center mb-4">
+      <button
+        onclick="toggleSidebar()"
+        class="text-2xl p-2 rounded-lg hover:bg-gray-200">
+        ☰
+      </button>
+    </div>
 
     <!-- DASHBOARD -->
     <div id="pageDashboard">
 
       <!-- Header -->
-      <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
-        
-        <h1 class="text-2xl md:text-4xl font-bold">
+      <div class="flex justify-between items-center mb-6">
+
+        <h1 class="text-4xl font-bold">
           Dashboard
         </h1>
 
         <button
           onclick="openCucian()"
-          class="w-full md:w-auto bg-teal-600 text-white px-5 py-3 rounded-xl font-medium shadow"
+          class="bg-teal-600 text-white px-5 py-3 rounded-xl font-medium shadow">
           + Cucian Baru
         </button>
 
@@ -312,22 +327,22 @@
       <!-- Statistik -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
-        <div class="bg-white rounded-2xl p-4 md:p-5 shadow">
+        <div class="bg-white rounded-2xl p-5 shadow">
           <p class="text-gray-500">Cucian Masuk</p>
           <h3 id="statMasuk" class="text-4xl font-bold mt-2">0</h3>
         </div>
 
-        <div class="bg-white rounded-2xl p-4 md:p-5 shadow">
+        <div class="bg-white rounded-2xl p-5 shadow">
           <p class="text-gray-500">Sedang Dikerjakan</p>
           <h3 id="statProses" class="text-4xl font-bold mt-2">0</h3>
         </div>
 
-        <div class="bg-white rounded-2xl p-4 md:p-5 shadow">
+        <div class="bg-white rounded-2xl p-5 shadow">
           <p class="text-gray-500">Cucian Selesai</p>
           <h3 id="statSelesai" class="text-4xl font-bold mt-2">0</h3>
         </div>
 
-        <div class="bg-white rounded-2xl p-4 md:p-5 shadow">
+        <div class="bg-white rounded-2xl p-5 shadow">
           <p class="text-gray-500">Pendapatan Hari Ini</p>
           <h3 id="statPendapatan" class="text-4xl font-bold text-teal-700 mt-2">
             Rp 0
@@ -342,7 +357,7 @@
         <!-- Grafik -->
         <div class="lg:col-span-2 bg-white rounded-2xl p-4 md:p-6 shadow">
           
-          <h3 class="font-bold text-lg md:text-2xl mb-4">
+          <h3 class="font-bold text-2xl mb-4">
             Tren Pendapatan Minggu Ini
           </h3>
 
@@ -353,7 +368,7 @@
         <!-- Cucian Selesai -->
         <div class="bg-white rounded-2xl p-6 shadow">
 
-          <h3 class="font-bold text-lg md:text-2xl mb-4">
+          <h3 class="font-bold text-2xl mb-4">
             Cucian Selesai Terbaru
           </h3>
 
@@ -403,7 +418,7 @@
           </button>
         </div>
         
-        <div class="bg-white rounded-2xl shadow overflow-x-auto">
+        <div class="bg-white rounded-2xl shadow overflow-hidden">
           <table class="w-full">
             <thead class="bg-gray-100">
               
