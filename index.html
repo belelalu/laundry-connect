@@ -140,40 +140,39 @@
       </p>
 
       <!-- Login Form -->
-      <div class="space-y-5">
+<form
+  class="space-y-5"
+  onsubmit="event.preventDefault(); doLogin();">
 
-        <div>
-          <label class="block mb-2 font-medium">
-            Email
-          </label>
+  <div>
+    <label class="block mb-2 font-medium">Email</label>
+    <input
+      id="email"
+      type="email"
+      class="w-full p-4 border rounded-2xl"
+      placeholder="admin@laundryconnect.com"
+      autocomplete="username">
+  </div>
 
-          <input
-            id="email"
-            class="w-full p-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            placeholder="admin@laundryconnect.com">
-        </div>
+  <div>
+    <label class="block mb-2 font-medium">Password</label>
+    <input
+      id="password"
+      type="password"
+      class="w-full p-4 border rounded-2xl"
+      placeholder="••••••••"
+      autocomplete="current-password">
+  </div>
 
-        <div>
-          <label class="block mb-2 font-medium">
-            Password
-          </label>
+  <button
+    type="submit"
+    class="w-full py-4 rounded-2xl text-white text-lg font-semibold bg-gradient-to-r from-cyan-700 to-teal-600 hover:shadow-lg transition">
 
-          <input
-            id="password"
-            type="password"
-            class="w-full p-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            placeholder="••••••••">
-        </div>
+    Masuk ke Dashboard
 
-        <button
-          onclick="doLogin()"
-          class="w-full py-4 rounded-2xl text-white text-lg font-semibold bg-gradient-to-r from-cyan-700 to-teal-600 hover:shadow-lg transition">
+  </button>
 
-          Masuk ke Dashboard
-
-        </button>
-
-      </div>
+</form>
 
       <!-- Public Tracking -->
       <div
