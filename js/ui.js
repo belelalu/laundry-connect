@@ -10,7 +10,7 @@ window.showApp = function () {
 
   loadUserInfo();
 
-  showPage("dashboard");
+  // showPage("dashboard");
 
 };
 
