@@ -158,32 +158,54 @@ window.toggleSidebar = function(force) {
 
   const mobile = window.innerWidth < 1024;
 
-  let open =
-    !sidebar.classList.contains("-translate-x-full");
-
-  if (typeof force === "boolean") {
-    open = force;
-  }
-
+  // =========================
+  // MODE SMARTPHONE
+  // =========================
   if (mobile) {
 
-    if (open) {
-      sidebar.classList.add("-translate-x-full");
-      overlay.classList.add("hidden");
-    } else {
-      sidebar.classList.remove("-translate-x-full");
-      overlay.classList.remove("hidden");
+    const isHidden =
+      sidebar.classList.contains("-translate-x-full");
+
+    if (typeof force === "boolean") {
+
+      if (force) {
+        sidebar.classList.remove("-translate-x-full");
+        if (overlay) overlay.classList.remove("hidden");
+      } else {
+        sidebar.classList.add("-translate-x-full");
+        if (overlay) overlay.classList.add("hidden");
+      }
+
+      return;
     }
 
-  } else {
-
-    // mode desktop (collapse)
-    if (open) {
-      sidebar.style.width = "0px";
-      sidebar.style.overflow = "hidden";
+    if (isHidden) {
+      sidebar.classList.remove("-translate-x-full");
+      if (overlay) overlay.classList.remove("hidden");
     } else {
+      sidebar.classList.add("-translate-x-full");
+      if (overlay) overlay.classList.add("hidden");
+    }
+
+  }
+
+  // =========================
+  // MODE DESKTOP
+  // =========================
+  else {
+
+    const collapsed = sidebar.style.width === "0px";
+
+    if (collapsed) {
+      // tampilkan kembali
       sidebar.style.width = "16rem";
+      sidebar.style.minWidth = "16rem";
       sidebar.style.overflow = "";
+    } else {
+      // sembunyikan
+      sidebar.style.width = "0px";
+      sidebar.style.minWidth = "0px";
+      sidebar.style.overflow = "hidden";
     }
 
   }
