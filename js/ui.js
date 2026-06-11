@@ -148,3 +148,44 @@ window.logout = function () {
   location.reload();
 
 };
+
+window.toggleSidebar = function(force) {
+
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+
+  if (!sidebar) return;
+
+  const mobile = window.innerWidth < 1024;
+
+  let open =
+    !sidebar.classList.contains("-translate-x-full");
+
+  if (typeof force === "boolean") {
+    open = force;
+  }
+
+  if (mobile) {
+
+    if (open) {
+      sidebar.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    } else {
+      sidebar.classList.remove("-translate-x-full");
+      overlay.classList.remove("hidden");
+    }
+
+  } else {
+
+    // mode desktop (collapse)
+    if (open) {
+      sidebar.style.width = "0px";
+      sidebar.style.overflow = "hidden";
+    } else {
+      sidebar.style.width = "16rem";
+      sidebar.style.overflow = "";
+    }
+
+  }
+
+};
